@@ -1,0 +1,183 @@
+﻿<!--
+// (c) Copyright Microsoft Corporation.
+// This source is subject to the Microsoft Public License (Ms-PL).
+// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
+// All other rights reserved.
+-->
+    
+<UserControl 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+  xmlns:samples="clr-namespace:System.Windows.Controls.Samples"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  x:Class="System.Windows.Controls.Samples.CustomSeriesSample">
+    <StackPanel>
+
+        <!-- Basic Examples -->
+        <ContentControl Content="Basic Examples" Style="{StaticResource Header}"/>
+        <WrapPanel>
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart Title="Constant">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Function="110"
+                          Title="f(x) = 110"
+                          LineBrush="Blue"
+                          LineThickness="2" />
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+            
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart Title="Linear">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Function="110 + x"
+                          Title="f(x) = 110 + x"
+                          LineBrush="Green"
+                          LineThickness="2" />
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+            
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart Title="Quadratic">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Function="110 + (x - 4)^2"
+                          LineBrush="Red"
+                          LineThickness="1">
+                            <samples:FunctionSeries.Title>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Grid.Row="1" Text="f(x) = 110 + (x - 4)" Margin="0 4 0 0" />
+                                    <TextBlock Grid.Column="1" Text="2" FontSize="8" Margin="0"  />
+                                </StackPanel>
+                            </samples:FunctionSeries.Title>
+                        </samples:FunctionSeries>
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+            
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart Title="Cubic">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Function="110 + (x - 4)^3"
+                          LineBrush="Black"
+                          LineThickness="3">
+                            <samples:FunctionSeries.Title>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Grid.Row="1" Text="f(x) = 110 + (x - 4)" Margin="0 4 0 0" />
+                                    <TextBlock Grid.Column="1" Text="3" FontSize="8" Margin="0"  />
+                                </StackPanel>
+                            </samples:FunctionSeries.Title>
+                        </samples:FunctionSeries>
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+            
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart Title="Inverse">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Function="110 + 1 / (x - 4)"
+                          LineThickness="1">
+                            <samples:FunctionSeries.Title>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Grid.Row="1" Text="f(x) = 110 + " VerticalAlignment="Center" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="1" HorizontalAlignment="Center" />
+                                        <Line Stroke="Black" StrokeThickness="1" X1="0" X2="30" Y1="0" Y2="0" />
+                                        <TextBlock Text="x - 4" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </samples:FunctionSeries.Title>
+                        </samples:FunctionSeries>
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+            
+            <Grid Style="{StaticResource WrapperStyle}">
+                <chartingToolkit:Chart x:Name="CustomFunctionChart" Title="Custom Function">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ScatterSeries
+                          Title="Particulate Levels"
+                          ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                          IndependentValueBinding="{Binding Rainfall}"
+                          DependentValueBinding="{Binding Particulate}" />
+                        <samples:FunctionSeries
+                          Title="f(x) = 110 + 3 * Math.Sin(x)"
+                          LineThickness="1" />
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+        </WrapPanel>
+        
+        <!-- Regression Scenario -->
+        <ContentControl Content="Regression Scenario" Style="{StaticResource Header}"/>
+        <Grid Height="500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Right" Text="Regression: " />
+            <ComboBox
+              Grid.Column="1"
+              SelectionChanged="OnRegressionTypeChanged"
+              HorizontalAlignment="Left">
+                <ComboBox.ItemsSource>
+                    <samples:ObjectCollection>
+                        <system:String>Linear</system:String>
+                        <system:String>Quadratic</system:String>
+                        <system:String>Cubic</system:String>
+                        <system:String>Quartic</system:String>
+                    </samples:ObjectCollection>
+                </ComboBox.ItemsSource>
+            </ComboBox>
+            <chartingToolkit:Chart x:Name="ParticulateAnalysis" Grid.Row="1" Grid.ColumnSpan="2" Title="Particulate Level Analysis">
+                <chartingToolkit:Chart.Series>
+                    <chartingToolkit:ScatterSeries
+                      Title="Particulate Levels"
+                      ItemsSource="{Binding LevelsInRainfall, Source={StaticResource ParticulateLevel}}"
+                      IndependentValueBinding="{Binding Rainfall}"
+                      DependentValueBinding="{Binding Particulate}" />
+                    <samples:FunctionSeries
+                      Title="Regression"
+                      LineBrush="Blue"
+                      LineThickness="2" />
+                </chartingToolkit:Chart.Series>
+            </chartingToolkit:Chart>
+        </Grid>
+        
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,250 @@
+﻿<!--
+// (c) Copyright Microsoft Corporation.
+// This source is subject to the Microsoft Public License (Ms-PL).
+// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
+// All other rights reserved.
+-->
+
+<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:samples1="clr-namespace:System.Windows.Controls.Samples"
+    x:Class="System.Windows.Controls.Samples.OverviewSample">
+    <StackPanel>
+
+        <StackPanel.Resources>
+
+            <!-- Style for the Grid wrapper around each sample item -->
+            <Style x:Key="OverviewWrapperStyle" TargetType="Grid">
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="1,4,4,1"/>
+                <Setter Property="MinWidth" Value="450"/>
+                <Setter Property="MinHeight" Value="300"/>
+            </Style>
+
+        </StackPanel.Resources>
+
+        <!-- Typical -->
+        <ContentControl Content="Typical" Style="{StaticResource Header}"/>
+
+        <WrapPanel>
+
+            <!-- Column (Multiple) -->
+            <Grid Style="{StaticResource OverviewWrapperStyle}">
+                <chartingToolkit:Chart
+                    Title="Column (Multiple)"
+                    LegendTitle="Legend">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ColumnSeries Title="Series A">
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>1</system:Int32>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>5</system:Int32>
+                                    <system:Int32>2</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                        <chartingToolkit:ColumnSeries Title="Series B">
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>2</system:Int32>
+                                    <system:Int32>4</system:Int32>
+                                    <system:Int32>6</system:Int32>
+                                    <system:Int32>3</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                        <chartingToolkit:ColumnSeries Title="Series C">
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>4</system:Int32>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>2</system:Int32>
+                                    <system:Int32>5</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                    </chartingToolkit:Chart.Series>
+                    <chartingToolkit:Chart.Axes>
+                        <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" ShowGridLines="True"/>
+                    </chartingToolkit:Chart.Axes>
+                </chartingToolkit:Chart>
+            </Grid>
+
+            <!-- Pie -->
+            <Grid Style="{StaticResource OverviewWrapperStyle}">
+                <chartingToolkit:Chart
+                    Title="Pie">
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:PieSeries
+                            IndependentValueBinding="{Binding Species}"
+                            DependentValueBinding="{Binding Count}">
+                            <chartingToolkit:PieSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <samples1:Pet Species="Dogs" Count="3"/>
+                                    <samples1:Pet Species="Cats" Count="4"/>
+                                    <samples1:Pet Species="Birds" Count="2"/>
+                                    <samples1:Pet Species="Mice" Count="3"/>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:PieSeries.ItemsSource>
+                        </chartingToolkit:PieSeries>
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>      
+        </WrapPanel>
+
+
+        <!-- Styling -->
+        <ContentControl Content="Styling" Style="{StaticResource Header}"/>
+
+        <WrapPanel>
+
+            <!-- Custom Colors -->
+            <Grid Style="{StaticResource OverviewWrapperStyle}">
+                <chartingToolkit:Chart Title="Custom Colors">
+                    <chartingToolkit:Chart.Palette>
+                        <visualizationToolkit:ResourceDictionaryCollection>
+                            <ResourceDictionary>
+                                <Style x:Key="DataPointStyle" TargetType="Control">
+                                    <Setter Property="Background" Value="{StaticResource DefaultEnhancedChartDarkBlue}"/>
+                                </Style>
+                            </ResourceDictionary>
+                            <ResourceDictionary>
+                                <Style x:Key="DataPointStyle" TargetType="Control">
+                                    <Setter Property="Background" Value="{StaticResource ShinyYellowBrush}"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </visualizationToolkit:ResourceDictionaryCollection>
+                    </chartingToolkit:Chart.Palette>
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ColumnSeries>
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>5</system:Int32>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>4</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                        <chartingToolkit:ColumnSeries>
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>2</system:Int32>
+                                    <system:Int32>4</system:Int32>
+                                    <system:Int32>2</system:Int32>
+                                    <system:Int32>4</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                    </chartingToolkit:Chart.Series>
+                </chartingToolkit:Chart>
+            </Grid>
+
+            <!-- Custom Template -->
+            <Grid Style="{StaticResource OverviewWrapperStyle}">
+                <chartingToolkit:Chart Title="Custom Template">
+                    <chartingToolkit:Chart.Palette>
+                        <visualizationToolkit:ResourceDictionaryCollection>
+                            <ResourceDictionary>
+                                <Style x:Key="DataPointStyle" TargetType="chartingToolkit:DataPoint">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FFD2D2D2"/>
+                                                <GradientStop Color="#FFA3A3A3" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="BorderBrush" Value="Black"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="IsTabStop" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="chartingToolkit:DataPoint">
+                                                <Border  Width="40" x:Name="Root" Opacity="0" BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                                                    <ToolTipService.ToolTip>
+                                                        <ContentControl Content="{TemplateBinding FormattedDependentValue}"/>
+                                                    </ToolTipService.ToolTip>
+                                                    <Border  BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4" >
+                                                        <Border Background="DarkGray" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                                                            <Grid Width="40">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="10"/>
+                                                                    <RowDefinition Height="5"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <Border Margin="0,0,0,0" Grid.Row="0" Grid.RowSpan="3" CornerRadius="4,4,4,4"  x:Name="glow" Opacity="0">
+                                                                    <Border.Background>
+                                                                        <RadialGradientBrush GradientOrigin="0.504,0.459">
+                                                                            <RadialGradientBrush.RelativeTransform>
+                                                                                <TransformGroup>
+                                                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="-2.516" ScaleY="-2.2"/>
+                                                                                    <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                                                                    <RotateTransform CenterX="0.5" CenterY="0.5"/>
+                                                                                    <TranslateTransform X="0.149" Y="0.448"/>
+                                                                                </TransformGroup>
+                                                                            </RadialGradientBrush.RelativeTransform>
+                                                                            <GradientStop Color="#372DE6"/>
+                                                                            <GradientStop Color="#EE4646" Offset="1"/>
+                                                                        </RadialGradientBrush>
+                                                                    </Border.Background>
+                                                                </Border>
+                                                                <Border Grid.RowSpan="1" CornerRadius="4,4,0,0" x:Name="shine" Margin="0,0,0,0" Height="Auto" VerticalAlignment="Stretch" Grid.Row="0">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                            <GradientStop Color="#99FFFFFF"/>
+                                                                            <GradientStop Color="#66FFFFFF" Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                </Border>
+                                                                <Path Height="5" Margin="0,0,0,0" VerticalAlignment="Top" Stretch="Fill" Stroke="{x:Null}" Grid.Row="1" Data="M0.5,0.5 L189.5,0.5 L189.5,4.5 L169.85396,3.7 L133.79474,3.5 L96.989479,3.3 L58.940792,3.3 L26.114473,3.5 L0.5,4.5 z">
+                                                                    <Path.Fill>
+                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                            <GradientStop Color="#66FFFFFF"/>
+                                                                            <GradientStop Color="#33FFFFFF" Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Path.Fill>
+                                                                </Path>
+                                                            </Grid>
+                                                        </Border>
+                                                    </Border>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ResourceDictionary>
+                        </visualizationToolkit:ResourceDictionaryCollection>
+                    </chartingToolkit:Chart.Palette>
+                    <chartingToolkit:Chart.Series>
+                        <chartingToolkit:ColumnSeries>
+                            <chartingToolkit:ColumnSeries.ItemsSource>
+                                <samples1:ObjectCollection>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>5</system:Int32>
+                                    <system:Int32>3</system:Int32>
+                                    <system:Int32>4</system:Int32>
+                                </samples1:ObjectCollection>
+                            </chartingToolkit:ColumnSeries.ItemsSource>
+                        </chartingToolkit:ColumnSeries>
+                    </chartingToolkit:Chart.Series>
+                    <chartingToolkit:Chart.PlotAreaStyle>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="#DDDDDD"/>
+                        </Style>
+                    </chartingToolkit:Chart.PlotAreaStyle>
+                    <chartingToolkit:Chart.Axes>
+                        <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" ShowGridLines="True"/>
+                    </chartingToolkit:Chart.Axes>
+                </chartingToolkit:Chart>
+            </Grid>
+
+        </WrapPanel>
+
+    </StackPanel>
+</UserControl>

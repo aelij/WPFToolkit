@@ -1,0 +1,81 @@
+﻿<!--
+// (c) Copyright Microsoft Corporation.
+// This source is subject to the Microsoft Public License (Ms-PL).
+// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
+// All other rights reserved.
+-->
+
+<UserControl x:Class="System.Windows.Controls.Samples.SeriesZoomSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"             
+    xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:chartingPrimitivesToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit">
+
+    <UserControl.Resources>
+        <ControlTemplate TargetType="chartingToolkit:Chart" x:Key="ZoomChartTemplate">
+            <Border 
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <visualizationToolkit:Title
+                        Content="{TemplateBinding Title}"
+                        Style="{TemplateBinding TitleStyle}"/>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <visualizationToolkit:Legend
+                            x:Name="Legend"
+                            Header="{TemplateBinding LegendTitle}"
+                            Style="{TemplateBinding LegendStyle}"
+                            Grid.Column="1"/>
+
+                        <ScrollViewer 
+                            x:Name="ScrollArea" BorderThickness="0" 
+                            HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
+                            <chartingPrimitivesToolkit:EdgePanel x:Name="ChartArea" Style="{TemplateBinding ChartAreaStyle}">
+                                <Grid Canvas.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}" />
+                                <Border Canvas.ZIndex="1" BorderBrush="#FF919191" BorderThickness="1" />
+                            </chartingPrimitivesToolkit:EdgePanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+    </UserControl.Resources>
+
+    <StackPanel Background="White">
+
+        <ContentControl Content="Zooming a Series" Style="{StaticResource Header}"/>
+
+        <chartingToolkit:Chart HorizontalAlignment="Left" Width="450" Height="320" Template="{StaticResource ZoomChartTemplate}" x:Name="ZoomChart" Title="Zoomable">
+            <chartingToolkit:LineSeries
+                Title="Widget Popularity"
+                ItemsSource="{StaticResource WidgetPopularity}"
+                IndependentValueBinding="{Binding Date}"
+                DependentValueBinding="{Binding Percent}" />
+            <chartingToolkit:LineSeries
+                Title="Gizmo Popularity"
+                ItemsSource="{StaticResource GizmoPopularity}"
+                IndependentValueBinding="{Binding Date}"
+                DependentValueBinding="{Binding Percent}" />
+        </chartingToolkit:Chart>
+
+        <StackPanel Margin="5,10,0,0" Orientation="Horizontal" >
+            <TextBlock Text="Zoom:" />
+            <Slider Margin="5,0,0,0" Width="250" Minimum="0" Maximum="500" ValueChanged="ZoomChanged" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

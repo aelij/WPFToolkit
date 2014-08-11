@@ -1,0 +1,347 @@
+﻿<Application x:Class="System.Windows.Controls.Samples.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:samples="clr-namespace:System.Windows.Controls.Samples"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <samples:City x:Key="City" />
+        <samples:ParticulateLevel x:Key="ParticulateLevel" />
+        <samples:WidgetPopularityPollCollection x:Key="WidgetPopularity" />
+        <samples:GizmoPopularityPollCollection x:Key="GizmoPopularity" />
+        <samples:DoodadPopularityPollCollection x:Key="DoodadPopularity" />
+
+        <!--Common Gradients used for different samples-->
+        <!--Gray-->
+        <Color x:Key="GrayShadeStartColor">#FFF4F4F4</Color>
+        <Color x:Key="GrayShadeEndColor">#FFB7B7B7</Color>
+        <RadialGradientBrush x:Key="GrayRadialBrush">
+            <RadialGradientBrush.RelativeTransform>
+                <TransformGroup>
+                    <ScaleTransform CenterX="0.5"
+                                    CenterY="0.5"
+                                    ScaleX="2.09"
+                                    ScaleY="1.819" />
+                    <SkewTransform CenterX="0.5"
+                                   CenterY="0.5" />
+                    <RotateTransform CenterX="0.5"
+                                     CenterY="0.5" />
+                    <TranslateTransform X="-0.425"
+                                        Y="-0.486" />
+                </TransformGroup>
+            </RadialGradientBrush.RelativeTransform>
+            <GradientStop Color="{StaticResource GrayShadeStartColor}" />
+            <GradientStop Color="{StaticResource GrayShadeEndColor}"
+                          Offset="1" />
+        </RadialGradientBrush>
+        <!--Blue-->
+        <LinearGradientBrush x:Key="DefaultEnhancedChartDarkBlue"
+                             EndPoint="0.5,1"
+                             StartPoint="0.5,0">
+            <GradientStop Color="#FFB9D6F7"
+                          Offset="0" />
+            <GradientStop Color="#FF5A88CE"
+                          Offset="0.185" />
+            <GradientStop Color="#FF477DAB"
+                          Offset="0.475" />
+            <GradientStop Color="#FF284B70"
+                          Offset="1" />
+        </LinearGradientBrush>
+        <!--Red-->
+        <LinearGradientBrush x:Key="DefaultEnhancedChartDarkRed"
+                             EndPoint="0.5,1"
+                             StartPoint="0.5,0">
+            <GradientStop Color="#FFFBB7B5"
+                          Offset="0" />
+            <GradientStop Color="#FFCE5A5A"
+                          Offset="0.185" />
+            <GradientStop Color="#FFAB4747"
+                          Offset="0.475" />
+            <GradientStop Color="#FF702828"
+                          Offset="1" />
+        </LinearGradientBrush>
+        <!--Yellow-->
+        <Color x:Key="ShinyTopGradientYellow">#FFFFFF72</Color>
+        <Color x:Key="ShinyBottomGradientYellow">#FF8F8832</Color>
+        <RadialGradientBrush x:Key="ShinyYellowBrush">
+            <RadialGradientBrush.RelativeTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="2.09"
+                                    ScaleY="1.819" />
+                    <TranslateTransform X="-0.425"
+                                        Y="-0.486" />
+                </TransformGroup>
+            </RadialGradientBrush.RelativeTransform>
+            <GradientStop Color="{StaticResource ShinyTopGradientYellow}" />
+            <GradientStop Color="{StaticResource ShinyBottomGradientYellow}"
+                          Offset="1" />
+        </RadialGradientBrush>
+
+        <!-- Style for the Grid wrapper around each sample item -->
+        <Style x:Key="WrapperStyle"
+               TargetType="Grid">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="Margin"
+                    Value="1,4,4,1" />
+            <Setter Property="MinWidth"
+                    Value="380" />
+            <Setter Property="MinHeight"
+                    Value="270" />
+        </Style>
+
+        <!-- Style for the Grid wrapper around each sample item (with no MinWidth/MinHeight) -->
+        <Style x:Key="WrapperStyleNoMinimum"
+               TargetType="Grid">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="Margin"
+                    Value="1,4,4,1" />
+        </Style>
+
+        <!-- Departments of the United Kingdom Government -->
+        <samples:ObjectCollection x:Key="DepartmentOrganization">
+            <samples:Department Title="Government">
+                <!-- Sovereign -->
+                <samples:Department Title="Sovereign">
+                    <samples:Department.Employees>
+                        <samples:Employee FirstName="Queen"
+                                                LastName="Elizabeth II" />
+                    </samples:Department.Employees>
+                </samples:Department>
+
+                <!-- Cabinet -->
+                <samples:Department Title="Cabinet">
+
+                    <samples:Department Title="Prime Minister">
+                        <samples:Department.Employees>
+                            <samples:Employee FirstName="Gordon"
+                                                    LastName="Brown" />
+                        </samples:Department.Employees>
+                    </samples:Department>
+
+                    <samples:Department Title="Chancellor">
+                        <samples:Department.Employees>
+                            <samples:Employee FirstName="Alistair"
+                                                    LastName="Darling" />
+                        </samples:Department.Employees>
+                    </samples:Department>
+
+                    <samples:Department Title="Foreign Secretary">
+                        <samples:Department.Employees>
+                            <samples:Employee FirstName="David"
+                                                    LastName="Miliband" />
+                        </samples:Department.Employees>
+                    </samples:Department>
+
+                    <samples:Department Title="Home Secretary">
+                        <samples:Department.Employees>
+                            <samples:Employee FirstName="Jacqui"
+                                                    LastName="Smith" />
+                        </samples:Department.Employees>
+                    </samples:Department>
+
+                    <samples:Department Title="Justice Secretary">
+                        <samples:Department.Employees>
+                            <samples:Employee FirstName="Jack"
+                                                    LastName="Straw" />
+                        </samples:Department.Employees>
+                    </samples:Department>
+
+                </samples:Department>
+            </samples:Department>
+        </samples:ObjectCollection>
+
+        <!-- Tree of Life used for hierarchical data binding examples -->
+        <samples:ObjectCollection x:Key="TreeOfLife">
+            <samples:Domain Classification="Bacteria">
+                <samples:Kingdom Classification="Eubacteria" />
+            </samples:Domain>
+            <samples:Domain Classification="Archaea">
+                <samples:Kingdom Classification="Archaebacteria" />
+            </samples:Domain>
+            <samples:Domain Classification="Eukarya">
+                <samples:Kingdom Classification="Protista" />
+                <samples:Kingdom Classification="Fungi" />
+                <samples:Kingdom Classification="Plantae" />
+                <samples:Kingdom Classification="Animalia">
+                    <samples:Phylum Classification="Arthropoda">
+                        <samples:Class Classification="Insecta">
+                            <samples:Order Classification="Diptera">
+                                <samples:Family Classification="Drosophilidae">
+                                    <samples:Genus Classification="Drosophila">
+                                        <samples:Species Classification="D. melanogaster" />
+                                    </samples:Genus>
+                                </samples:Family>
+                            </samples:Order>
+                        </samples:Class>
+                    </samples:Phylum>
+                    <samples:Phylum Classification="Chordata">
+                        <samples:Class Classification="Mammalia">
+                            <samples:Order Classification="Primates">
+                                <samples:Family Classification="Hominidae">
+                                    <samples:Genus Classification="Homo">
+                                        <samples:Species Classification="H. sapiens" />
+                                    </samples:Genus>
+                                </samples:Family>
+                            </samples:Order>
+                        </samples:Class>
+                    </samples:Phylum>
+                    <samples:Phylum Classification="Ctenophora" />
+                    <samples:Phylum Classification="Porifera" />
+                    <samples:Phylum Classification="Placozoa" />
+                </samples:Kingdom>
+            </samples:Domain>
+        </samples:ObjectCollection>
+
+        <!-- Catalog of music used for sample -->
+        <samples:ObjectCollection x:Key="MusicCatalog">
+            <samples:Artist ArtistName="Frank Sinatra"
+                                  Genre="Pop">
+                <samples:Album Title="In The Wee Small Hours"
+                                     ReleaseYear="1954">
+                    <samples:Song Title="In The Wee Small Hours Of The Morning"
+                                        Length="3:00" />
+                    <samples:Song Title="Mood Indigo"
+                                        Length="3:30" />
+                    <samples:Song Title="Glad To Be Unhappy"
+                                        Length="2:35" />
+                    <samples:Song Title="I Get Along Without You Very Well"
+                                        Length="3:42" />
+                    <samples:Song Title="Deep In A Dream"
+                                        Length="2:49" />
+                </samples:Album>
+                <samples:Album Title="You Do Something To Me"
+                                     ReleaseYear="2008">
+                    <samples:Song Title="As Time Goes By"
+                                        Length="2:13" />
+                    <samples:Song Title="Close To You"
+                                        Length="3:06" />
+                    <samples:Song Title="Come Fly With Me"
+                                        Length="2:54" />
+                    <samples:Song Title="Guess I'll Hang My Tears Out To Dry"
+                                        Length="3:05" />
+                    <samples:Song Title="I've Got My Love To Keep Me Warm"
+                                        Length="1:56" />
+                </samples:Album>
+            </samples:Artist>
+            <samples:Artist ArtistName="African Wind"
+                                  Genre="Blues">
+                <samples:Album Title="Mercy"
+                                     ReleaseYear="2006">
+                    <samples:Song Title="From African Soul"
+                                        Length="3:12" />
+                    <samples:Song Title="Buren Of Blues"
+                                        Length="4:23" />
+                    <samples:Song Title="Mississippi Fred's Dream"
+                                        Length="4:48" />
+                    <samples:Song Title="What You Gonna Do"
+                                        Length="4:01" />
+                </samples:Album>
+            </samples:Artist>
+            <samples:Artist ArtistName="Johnny Cash"
+                                  Genre="Country">
+                <samples:Album Title="At Folsom Prison"
+                                     ReleaseYear="1968">
+                    <samples:Song Title="Folsom Prison Blues"
+                                        Length="2:42" />
+                    <samples:Song Title="Busted"
+                                        Length="1:25" />
+                    <samples:Song Title="Dark As The Dungeon"
+                                        Length="3:04" />
+                    <samples:Song Title="I Still Miss Someone"
+                                        Length="1:38" />
+                </samples:Album>
+                <samples:Album Title="The Man Comes Around"
+                                     ReleaseYear="2002">
+                    <samples:Song Title="The Man Comes Around"
+                                        Length="4:26" />
+                    <samples:Song Title="Hurt"
+                                        Length="3:36" />
+                    <samples:Song Title="Give My Love To Rose"
+                                        Length="3:27" />
+                    <samples:Song Title="Bridge Over Troubled Water"
+                                        Length="3:54" />
+                </samples:Album>
+            </samples:Artist>
+        </samples:ObjectCollection>
+        
+        <!-- Label used by samples -->
+        <Style x:Key="Description" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- Informational paragraph text -->
+        <Style x:Key="Information" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+
+        <!-- API Names -->
+        <Style x:Key="ApiName" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5 0 0 0" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#FF555555" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- API Descriptions -->
+        <Style x:Key="ApiDescription" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5 0 0 5" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- Header used to seperate sections in the sample pages -->
+        <Style x:Key="Header" TargetType="ContentControl">
+            <Setter Property="Background" Value="#22D2D2D2" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontStretch" Value="UltraExpanded" />
+            <Setter Property="Foreground" Value="#FF313861" />
+            <Setter Property="Margin" Value="0 8 0 2" />
+            <Setter Property="Padding" Value="6 2 2 2" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="2">
+                            <ContentControl
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Cursor="{TemplateBinding Cursor}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontStretch="{TemplateBinding FontStretch}"
+                                Foreground="{TemplateBinding Foreground}"
+                                IsTabStop="{TemplateBinding IsTabStop}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>
