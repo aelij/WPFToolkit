@@ -17,12 +17,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
     ///     Represents a control that displays a Chart.
     /// </summary>
     /// <QualityBand>Preview</QualityBand>
-    [TemplatePart(Name = ChartAreaName, Type = typeof (EdgePanel))]
-    [TemplatePart(Name = LegendName, Type = typeof (Legend))]
-    [StyleTypedProperty(Property = "TitleStyle", StyleTargetType = typeof (Title))]
-    [StyleTypedProperty(Property = "LegendStyle", StyleTargetType = typeof (Legend))]
-    [StyleTypedProperty(Property = "ChartAreaStyle", StyleTargetType = typeof (EdgePanel))]
-    [StyleTypedProperty(Property = "PlotAreaStyle", StyleTargetType = typeof (Grid))]
+    [TemplatePart(Name = ChartAreaName, Type = typeof(EdgePanel))]
+    [TemplatePart(Name = LegendName, Type = typeof(Legend))]
+    [StyleTypedProperty(Property = "TitleStyle", StyleTargetType = typeof(Title))]
+    [StyleTypedProperty(Property = "LegendStyle", StyleTargetType = typeof(Legend))]
+    [StyleTypedProperty(Property = "ChartAreaStyle", StyleTargetType = typeof(EdgePanel))]
+    [StyleTypedProperty(Property = "PlotAreaStyle", StyleTargetType = typeof(Grid))]
     [ContentProperty("Series")]
     public class Chart : Control, ISeriesHost
     {
@@ -138,14 +138,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     Gets or sets the collection of Series displayed by the Chart.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly",
-            Justification = "Setter is public to work around a limitation with the XAML editing tools.")]
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value",
-            Justification = "Setter is public to work around a limitation with the XAML editing tools.")]
         public Collection<ISeries> Series
         {
             get { return _series; }
-            set { throw new NotSupportedException(Properties.Resources.Chart_Series_SetterNotSupported); }
         }
 
         /// <summary>
@@ -170,8 +165,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty ChartAreaStyleProperty =
             DependencyProperty.Register(
                 "ChartAreaStyle",
-                typeof (Style),
-                typeof (Chart),
+                typeof(Style),
+                typeof(Chart),
                 null);
 
         #endregion public Style ChartAreaStyle
@@ -198,8 +193,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty LegendStyleProperty =
             DependencyProperty.Register(
                 "LegendStyle",
-                typeof (Style),
-                typeof (Chart),
+                typeof(Style),
+                typeof(Chart),
                 null);
 
         #endregion public Style LegendStyle
@@ -221,8 +216,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty LegendTitleProperty =
             DependencyProperty.Register(
                 "LegendTitle",
-                typeof (object),
-                typeof (Chart),
+                typeof(object),
+                typeof(Chart),
                 null);
 
         #endregion public object LegendTitle
@@ -244,8 +239,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty PlotAreaStyleProperty =
             DependencyProperty.Register(
                 "PlotAreaStyle",
-                typeof (Style),
-                typeof (Chart),
+                typeof(Style),
+                typeof(Chart),
                 null);
 
         #endregion public Style PlotAreaStyle
@@ -269,8 +264,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty PaletteProperty =
             DependencyProperty.Register(
                 "Palette",
-                typeof (Collection<ResourceDictionary>),
-                typeof (Chart),
+                typeof(Collection<ResourceDictionary>),
+                typeof(Chart),
                 new PropertyMetadata(OnPalettePropertyChanged));
 
         /// <summary>
@@ -282,8 +277,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnPalettePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (Chart) d;
-            var newValue = (Collection<ResourceDictionary>) e.NewValue;
+            var source = (Chart)d;
+            var newValue = (Collection<ResourceDictionary>)e.NewValue;
             source.OnPalettePropertyChanged(newValue);
         }
 
@@ -325,8 +320,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register(
                 "Title",
-                typeof (object),
-                typeof (Chart),
+                typeof(object),
+                typeof(Chart),
                 null);
 
         #endregion
@@ -348,8 +343,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty TitleStyleProperty =
             DependencyProperty.Register(
                 "TitleStyle",
-                typeof (Style),
-                typeof (Chart),
+                typeof(Style),
+                typeof(Chart),
                 null);
 
         #endregion public Style TitleStyle
@@ -362,7 +357,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             Justification = "Dependency properties are initialized in-line.")]
         static Chart()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof (Chart), new FrameworkPropertyMetadata(typeof (Chart)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Chart), new FrameworkPropertyMetadata(typeof(Chart)));
         }
 
 #endif
@@ -431,25 +426,17 @@ namespace System.Windows.Controls.DataVisualization.Charting
             if (axis.Orientation == AxisOrientation.X)
             {
                 int numberOfTopAxes =
-                    InternalActualAxes.OfType<Axis>()
-                        .Where(currentAxis => currentAxis.Location == AxisLocation.Top)
-                        .Count();
+                    InternalActualAxes.OfType<Axis>().Count(currentAxis => currentAxis.Location == AxisLocation.Top);
                 int numberOfBottomAxes =
-                    InternalActualAxes.OfType<Axis>()
-                        .Where(currentAxis => currentAxis.Location == AxisLocation.Bottom)
-                        .Count();
+                    InternalActualAxes.OfType<Axis>().Count(currentAxis => currentAxis.Location == AxisLocation.Bottom);
                 return (numberOfBottomAxes > numberOfTopAxes) ? AxisLocation.Top : AxisLocation.Bottom;
             }
             if (axis.Orientation == AxisOrientation.Y)
             {
                 int numberOfLeftAxes =
-                    InternalActualAxes.OfType<Axis>()
-                        .Where(currentAxis => currentAxis.Location == AxisLocation.Left)
-                        .Count();
+                    InternalActualAxes.OfType<Axis>().Count(currentAxis => currentAxis.Location == AxisLocation.Left);
                 int numberOfRightAxes =
-                    InternalActualAxes.OfType<Axis>()
-                        .Where(currentAxis => currentAxis.Location == AxisLocation.Right)
-                        .Count();
+                    InternalActualAxes.OfType<Axis>().Count(currentAxis => currentAxis.Location == AxisLocation.Right);
                 return (numberOfLeftAxes > numberOfRightAxes) ? AxisLocation.Right : AxisLocation.Left;
             }
             return AxisLocation.Auto;
@@ -490,7 +477,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="args">Information about the event.</param>
         private void AxisOrientationChanged(object sender, RoutedPropertyChangedEventArgs<AxisOrientation> args)
         {
-            var axis = (Axis) sender;
+            var axis = (Axis)sender;
 
             axis.Location = GetAutoAxisLocation(axis);
         }
@@ -526,7 +513,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="args">Information about the event.</param>
         private void AxisLocationChanged(object sender, RoutedPropertyChangedEventArgs<AxisLocation> args)
         {
-            var axis = (Axis) sender;
+            var axis = (Axis)sender;
 
             if (args.NewValue == AxisLocation.Auto)
             {
@@ -548,7 +535,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         {
             series.SeriesHost = this;
 
-            var chartLegendItems = LegendItems as AggregatedObservableCollection<object>;
+            var chartLegendItems = (AggregatedObservableCollection<object>)LegendItems;
             int indexOfSeries = Series.IndexOf(series);
             chartLegendItems.ChildCollections.Insert(indexOfSeries, series.LegendItems);
         }
@@ -639,7 +626,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </param>
         private void RemoveSeriesFromPlotArea(ISeries series)
         {
-            var legendItemsList = LegendItems as AggregatedObservableCollection<object>;
+            var legendItemsList = (AggregatedObservableCollection<object>)LegendItems;
             legendItemsList.ChildCollections.Remove(series.LegendItems);
 
             series.SeriesHost = null;
@@ -658,11 +645,11 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 foreach (ISeries series in e.OldItems)
                 {
+                    // ReSharper disable once SuspiciousTypeConversion.Global
                     var host = series as ISeriesHost;
                     if (host != null)
                     {
-                        foreach (
-                            IRequireGlobalSeriesIndex tracksGlobalIndex in
+                        foreach (IRequireGlobalSeriesIndex tracksGlobalIndex in
                                 host.GetDescendentSeries().OfType<IRequireGlobalSeriesIndex>())
                         {
                             tracksGlobalIndex.GlobalSeriesIndexChanged(null);
@@ -689,7 +676,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
 
             if (e.Action != NotifyCollectionChangedAction.Replace)
             {
-                OnGlobalSeriesIndexesInvalidated(this, new RoutedEventArgs());
+                OnGlobalSeriesIndexesInvalidated();
             }
         }
 
@@ -713,9 +700,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     Updates the global indexes of all descendents that require a global
         ///     index.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="args">The event data.</param>
-        private void OnGlobalSeriesIndexesInvalidated(object sender, RoutedEventArgs args)
+        private void OnGlobalSeriesIndexesInvalidated()
         {
             UpdateGlobalIndexes();
         }
@@ -727,7 +712,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private void UpdateGlobalIndexes()
         {
             this.GetDescendentSeries().OfType<IRequireGlobalSeriesIndex>().ForEachWithIndex(
-                (seriesThatTracksGlobalIndex, index) => { seriesThatTracksGlobalIndex.GlobalSeriesIndexChanged(index); });
+                (seriesThatTracksGlobalIndex, index) => seriesThatTracksGlobalIndex.GlobalSeriesIndexChanged(index));
         }
 
         /// <summary>
@@ -759,7 +744,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         ObservableCollection<ISeries> ISeriesHost.Series
         {
-            get { return (ObservableCollection<ISeries>) Series; }
+            get { return (ObservableCollection<ISeries>)Series; }
         }
     }
 }

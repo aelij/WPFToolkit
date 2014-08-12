@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="System.Windows.Controls.Samples.PieList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+             xmlns:samples="clr-namespace:System.Windows.Controls.Samples"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300">
+    <FrameworkElement.Resources>
+        <samples:TitleAngleConverter x:Key="TitleAngleConverter" />
+        <Style x:Key="M"
+               TargetType="toolkit:PieDataPoint">
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="Padding"
+                    Value="-60" />
+            <Setter Property="Tag">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=toolkit:PieDataPoint}}">
+                            <!--<TextBlock Text="{Binding FormattedDependentValue}" />
+                            <TextBlock Text="{Binding FormattedRatio}" />-->
+                            <TextBlock Text="{Binding State}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="toolkit:PieDataPoint">
+                        <Grid x:Name="Root">
+                            <Path x:Name="Slice"
+                                  Data="{TemplateBinding Geometry}"
+                                  Fill="{TemplateBinding Background}"
+                                  Stroke="{TemplateBinding BorderBrush}"
+                                  StrokeMiterLimit="1">
+                            </Path>
+                            <samples:RadialPanel Margin="{TemplateBinding Padding}">
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Top">
+                                    <samples:RadialPanel.Angle>
+                                        <MultiBinding Converter="{StaticResource TitleAngleConverter}">
+                                            <Binding Path="ActualOffsetRatio"
+                                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding Path="ActualRatio"
+                                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                                        </MultiBinding>
+                                    </samples:RadialPanel.Angle>
+                                    <ContentPresenter Content="{Binding}"
+                                                      ContentTemplate="{TemplateBinding Tag}" />
+                                </StackPanel>
+                            </samples:RadialPanel>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </FrameworkElement.Resources>
+    <DockPanel>
+        <ListBox Name="List"
+                 SelectionChanged="OnSelectionChanged" />
+        <toolkit:Chart Name="Chart">
+            <toolkit:PieSeries IndependentValuePath="Item1"
+                                       DependentValuePath="Item2"
+                                       ItemsSource="{Binding Pairs}"
+                                       Margin="40">
+                <toolkit:PieSeries.Palette>
+                    <toolkit:ResourceDictionaryCollection>
+                        <ResourceDictionary>
+                            <Style x:Key="DataPointStyle"
+                                   TargetType="toolkit:PieDataPoint"
+                                   BasedOn="{StaticResource M}">
+                                <Setter Property="Background"
+                                        Value="DarkGoldenrod" />
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                            </Style>
+                        </ResourceDictionary>
+                        <ResourceDictionary>
+                            <Style x:Key="DataPointStyle"
+                                   TargetType="toolkit:PieDataPoint"
+                                   BasedOn="{StaticResource M}">
+                                <Setter Property="Background"
+                                        Value="Purple" />
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                            </Style>
+                        </ResourceDictionary>
+                    </toolkit:ResourceDictionaryCollection>
+                </toolkit:PieSeries.Palette>
+            </toolkit:PieSeries>
+        </toolkit:Chart>
+    </DockPanel>
+</UserControl>

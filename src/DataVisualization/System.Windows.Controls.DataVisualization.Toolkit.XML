@@ -6483,13 +6483,11 @@
             </param>
             <returns>An enumerator of ResourceDictionaries.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.Chart.OnGlobalSeriesIndexesInvalidated(System.Object,System.Windows.RoutedEventArgs)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.Chart.OnGlobalSeriesIndexesInvalidated">
             <summary>
                 Updates the global indexes of all descendents that require a global
                 index.
             </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="args">The event data.</param>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.Chart.UpdateGlobalIndexes">
             <summary>
@@ -7104,6 +7102,13 @@
                 object.  A number equal to 0 if they are equal.  A number greater
                 than zero if this unit value is greater than obj.
             </returns>
+        </member>
+        <member name="M:System.Windows.Controls.DataVisualization.UnitValue.Equals(System.Windows.Controls.DataVisualization.UnitValue)">
+            <summary>
+                Determines if two values are equal.
+            </summary>
+            <param name="other">The other value.</param>
+            <returns>A value indicating whether values are equal.</returns>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.UnitValue.Equals(System.Object)">
             <summary>

@@ -62,6 +62,11 @@ namespace System.Windows.Controls.DataVisualization
             return Value.CompareTo(unitValue.Value);
         }
 
+        /// <summary>
+        ///     Determines if two values are equal.
+        /// </summary>
+        /// <param name="other">The other value.</param>
+        /// <returns>A value indicating whether values are equal.</returns>
         public bool Equals(UnitValue other)
         {
             return Value.Equals(other.Value) && Unit == other.Unit;

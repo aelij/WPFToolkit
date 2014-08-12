@@ -637,6 +637,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
 #endif
             ClipGeometry = new RectangleGeometry();
             Clip = ClipGeometry;
+
+            Loaded += (o, e) => InvalidatePlotArea();
         }
 
         /// <summary>
@@ -947,7 +949,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
         {
             PlotAreaSize = e.NewSize;
             ClipGeometry.Rect = new Rect(0, 0, PlotAreaSize.Width, PlotAreaSize.Height);
-            if (null != PlotArea)
+            InvalidatePlotArea();
+        }
+
+        private void InvalidatePlotArea()
+        {
+            if (PlotArea != null)
             {
                 PlotArea.Width = PlotAreaSize.Width;
                 PlotArea.Height = PlotAreaSize.Height;
@@ -1254,7 +1261,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 objectAnimationUsingKeyFrames.KeyFrames.Add(discreteObjectKeyFrame);
                 stateChangeStoryBoard.Children.Add(objectAnimationUsingKeyFrames);
             }
-            
+
             _storyBoardQueue.Enqueue(
                 stateChangeStoryBoard,
                 (sender, args) => stateChangeStoryBoard.Stop());

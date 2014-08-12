@@ -175,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Charting\PieList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Charting\PieSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -236,9 +240,13 @@
     <Compile Include="Charting\PieAnimationSample.xaml.cs">
       <DependentUpon>PieAnimationSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Charting\PieList.xaml.cs">
+      <DependentUpon>PieList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Charting\PieSample.xaml.cs">
       <DependentUpon>PieSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Charting\RadialPanel.cs" />
     <Compile Include="Charting\SampleGenerators.cs" />
     <Compile Include="Charting\ScatterSample.xaml.cs">
       <DependentUpon>ScatterSample.xaml</DependentUpon>
@@ -251,6 +259,7 @@
     <Compile Include="Charting\Scenarios\SeriesZoom\SeriesZoomSample.xaml.cs">
       <DependentUpon>SeriesZoomSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Charting\TitleAngleConverter.cs" />
     <Compile Include="Common\BusinessObjects\DoodadPopularityPollCollection.cs" />
     <Compile Include="Common\BusinessObjects\GizmoPopularityPollCollection.cs" />
     <Compile Include="Common\BusinessObjects\Music\Album.cs" />
@@ -260,6 +269,7 @@
     <Compile Include="Common\BusinessObjects\NhlData\NhlNode.cs" />
     <Compile Include="Common\BusinessObjects\ParticulateLevel.cs" />
     <Compile Include="Common\BusinessObjects\PopularityPoll.cs" />
+    <Compile Include="Common\BusinessObjects\RandomPairs.cs" />
     <Compile Include="Common\BusinessObjects\Taxonomy\Class.cs" />
     <Compile Include="Common\BusinessObjects\Taxonomy\Domain.cs" />
     <Compile Include="Common\BusinessObjects\Taxonomy\Family.cs" />
