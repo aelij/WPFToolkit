@@ -86,7 +86,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public bool IsSelectionEnabled
         {
-            get { return (bool) GetValue(IsSelectionEnabledProperty); }
+            get { return (bool)GetValue(IsSelectionEnabledProperty); }
             set { SetValue(IsSelectionEnabledProperty, value); }
         }
 
@@ -96,8 +96,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty IsSelectionEnabledProperty =
             DependencyProperty.Register(
                 "IsSelectionEnabled",
-                typeof (bool),
-                typeof (DataPoint),
+                typeof(bool),
+                typeof(DataPoint),
                 new PropertyMetadata(false, OnIsSelectionEnabledPropertyChanged));
 
         /// <summary>
@@ -107,9 +107,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnIsSelectionEnabledPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
-            var oldValue = (bool) e.OldValue;
-            var newValue = (bool) e.NewValue;
+            var source = (DataPoint)d;
+            var oldValue = (bool)e.OldValue;
+            var newValue = (bool)e.NewValue;
             source.OnIsSelectionEnabledPropertyChanged(oldValue, newValue);
         }
 
@@ -176,17 +176,11 @@ namespace System.Windows.Controls.DataVisualization.Charting
         #region internal bool IsSelected
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the IsSelected property is
-        ///     being coerced.
-        /// </summary>
-        private bool IsCoercingIsSelected { get; set; }
-
-        /// <summary>
         ///     Gets or sets a value indicating whether the data point is selected.
         /// </summary>
         internal bool IsSelected
         {
-            get { return (bool) GetValue(IsSelectedProperty); }
+            get { return (bool)GetValue(IsSelectedProperty); }
             set { SetValue(IsSelectedProperty, value); }
         }
 
@@ -196,8 +190,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         internal static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register(
                 "IsSelected",
-                typeof (bool),
-                typeof (DataPoint),
+                typeof(bool),
+                typeof(DataPoint),
                 new PropertyMetadata(false, OnIsSelectedPropertyChanged));
 
         /// <summary>
@@ -207,9 +201,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnIsSelectedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
-            var oldValue = (bool) e.OldValue;
-            var newValue = (bool) e.NewValue;
+            var source = (DataPoint)d;
+            var oldValue = (bool)e.OldValue;
+            var newValue = (bool)e.NewValue;
             source.OnIsSelectedPropertyChanged(oldValue, newValue);
         }
 
@@ -243,7 +237,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public IComparable ActualDependentValue
         {
-            get { return (IComparable) GetValue(ActualDependentValueProperty); }
+            get { return (IComparable)GetValue(ActualDependentValueProperty); }
             set { SetValue(ActualDependentValueProperty, value); }
         }
 
@@ -253,9 +247,19 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty ActualDependentValueProperty =
             DependencyProperty.Register(
                 "ActualDependentValue",
-                typeof (IComparable),
-                typeof (DataPoint),
-                new PropertyMetadata(0.0, OnActualDependentValuePropertyChanged));
+                typeof(IComparable),
+                typeof(DataPoint),
+                new FrameworkPropertyMetadata(0.0, OnActualDependentValuePropertyChanged, CoerceActualDependentValue));
+
+        private static object CoerceActualDependentValue(DependencyObject d, object newValue)
+        {
+            double coercedValue;
+            if (!(newValue is double) && ValueHelper.TryConvert(newValue, out coercedValue))
+            {
+                return coercedValue;
+            }
+            return newValue;
+        }
 
         /// <summary>
         ///     Called when the value of the ActualDependentValue property changes.
@@ -265,23 +269,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private static void OnActualDependentValuePropertyChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
-            var oldValue = (IComparable) e.OldValue;
-            var newValue = (IComparable) e.NewValue;
+            var source = (DataPoint)d;
+            var oldValue = (IComparable)e.OldValue;
+            var newValue = (IComparable)e.NewValue;
             source.OnActualDependentValuePropertyChanged(oldValue, newValue);
         }
-
-        /// <summary>
-        ///     A value indicating whether the actual independent value is being
-        ///     coerced.
-        /// </summary>
-        private bool _isCoercingActualDependentValue;
-
-        /// <summary>
-        ///     The preserved previous actual dependent value before coercion.
-        /// </summary>
-        private IComparable _oldActualDependentValueBeforeCoercion;
-
+        
         /// <summary>
         ///     Called when the value of the ActualDependentValue property changes.
         /// </summary>
@@ -289,32 +282,10 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="newValue">The new value.</param>
         protected virtual void OnActualDependentValuePropertyChanged(IComparable oldValue, IComparable newValue)
         {
-            double coercedValue = 0.0;
-            if (!(newValue is double) && ValueHelper.TryConvert(newValue, out coercedValue))
+            RoutedPropertyChangedEventHandler<IComparable> handler = ActualDependentValueChanged;
+            if (handler != null)
             {
-                _isCoercingActualDependentValue = true;
-                _oldActualDependentValueBeforeCoercion = oldValue;
-            }
-
-            if (!_isCoercingActualDependentValue)
-            {
-                if (_oldActualDependentValueBeforeCoercion != null)
-                {
-                    oldValue = _oldActualDependentValueBeforeCoercion;
-                    _oldActualDependentValueBeforeCoercion = null;
-                }
-
-                RoutedPropertyChangedEventHandler<IComparable> handler = ActualDependentValueChanged;
-                if (handler != null)
-                {
-                    handler(this, new RoutedPropertyChangedEventArgs<IComparable>(oldValue, newValue));
-                }
-            }
-
-            if (_isCoercingActualDependentValue)
-            {
-                _isCoercingActualDependentValue = false;
-                ActualDependentValue = coercedValue;
+                handler(this, new RoutedPropertyChangedEventArgs<IComparable>(oldValue, newValue));
             }
         }
 
@@ -333,7 +304,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public IComparable DependentValue
         {
-            get { return (IComparable) GetValue(DependentValueProperty); }
+            get { return (IComparable)GetValue(DependentValueProperty); }
             set { SetValue(DependentValueProperty, value); }
         }
 
@@ -343,8 +314,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty DependentValueProperty =
             DependencyProperty.Register(
                 "DependentValue",
-                typeof (IComparable),
-                typeof (DataPoint),
+                typeof(IComparable),
+                typeof(DataPoint),
                 new PropertyMetadata(null, OnDependentValuePropertyChanged));
 
         /// <summary>
@@ -354,9 +325,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnDependentValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
-            var oldValue = (IComparable) e.OldValue;
-            var newValue = (IComparable) e.NewValue;
+            var source = (DataPoint)d;
+            var oldValue = (IComparable)e.OldValue;
+            var newValue = (IComparable)e.NewValue;
             source.OnDependentValuePropertyChanged(oldValue, newValue);
         }
 
@@ -378,15 +349,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 // Prefer setting the value as a double...
                 double coercedNewValue;
-                if (ValueHelper.TryConvert(newValue, out coercedNewValue))
-                {
-                    ActualDependentValue = coercedNewValue;
-                }
-                else
-                {
-                    // ... but fall back otherwise
-                    ActualDependentValue = newValue;
-                }
+                ActualDependentValue = ValueHelper.TryConvert(newValue, out coercedNewValue) ? coercedNewValue : newValue;
             }
         }
 
@@ -409,8 +372,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty DependentValueStringFormatProperty =
             DependencyProperty.Register(
                 "DependentValueStringFormat",
-                typeof (string),
-                typeof (DataPoint),
+                typeof(string),
+                typeof(DataPoint),
                 new PropertyMetadata(null, OnDependentValueStringFormatPropertyChanged));
 
         /// <summary>
@@ -421,7 +384,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private static void OnDependentValueStringFormatPropertyChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            var source = d as DataPoint;
+            var source = (DataPoint)d;
             var oldValue = e.OldValue as string;
             var newValue = e.NewValue as string;
             source.OnDependentValueStringFormatPropertyChanged(oldValue, newValue);
@@ -455,8 +418,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty FormattedDependentValueProperty =
             DependencyProperty.Register(
                 "FormattedDependentValue",
-                typeof (string),
-                typeof (DataPoint),
+                typeof(string),
+                typeof(DataPoint),
                 null);
 
         #endregion public string FormattedDependentValue
@@ -477,8 +440,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty FormattedIndependentValueProperty =
             DependencyProperty.Register(
                 "FormattedIndependentValue",
-                typeof (string),
-                typeof (DataPoint),
+                typeof(string),
+                typeof(DataPoint),
                 null);
 
         #endregion public string FormattedIndependentValue
@@ -505,8 +468,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty IndependentValueProperty =
             DependencyProperty.Register(
                 "IndependentValue",
-                typeof (object),
-                typeof (DataPoint),
+                typeof(object),
+                typeof(DataPoint),
                 new PropertyMetadata(null, OnIndependentValuePropertyChanged));
 
         /// <summary>
@@ -516,7 +479,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnIndependentValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
+            var source = (DataPoint)d;
             object oldValue = e.OldValue;
             object newValue = e.NewValue;
             source.OnIndependentValuePropertyChanged(oldValue, newValue);
@@ -540,15 +503,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 // Prefer setting the value as a double...
                 double coercedNewValue;
-                if (ValueHelper.TryConvert(newValue, out coercedNewValue))
-                {
-                    ActualIndependentValue = coercedNewValue;
-                }
-                else
-                {
-                    // ... but fall back otherwise
-                    ActualIndependentValue = newValue;
-                }
+                ActualIndependentValue = ValueHelper.TryConvert(newValue, out coercedNewValue) ? coercedNewValue : newValue;
             }
         }
 
@@ -571,8 +526,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty IndependentValueStringFormatProperty =
             DependencyProperty.Register(
                 "IndependentValueStringFormat",
-                typeof (string),
-                typeof (DataPoint),
+                typeof(string),
+                typeof(DataPoint),
                 new PropertyMetadata(null, OnIndependentValueStringFormatPropertyChanged));
 
         /// <summary>
@@ -583,7 +538,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private static void OnIndependentValueStringFormatPropertyChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            var source = d as DataPoint;
+            var source = (DataPoint)d;
             var oldValue = e.OldValue as string;
             var newValue = e.NewValue as string;
             source.OnIndependentValueStringFormatPropertyChanged(oldValue, newValue);
@@ -617,27 +572,26 @@ namespace System.Windows.Controls.DataVisualization.Charting
             get { return GetValue(ActualIndependentValueProperty); }
             set { SetValue(ActualIndependentValueProperty, value); }
         }
-
-        /// <summary>
-        ///     A value indicating whether the actual independent value is being
-        ///     coerced.
-        /// </summary>
-        private bool _isCoercingActualIndependentValue;
-
-        /// <summary>
-        ///     The preserved previous actual dependent value before coercion.
-        /// </summary>
-        private object _oldActualIndependentValueBeforeCoercion;
-
+        
         /// <summary>
         ///     Identifies the ActualIndependentValue dependency property.
         /// </summary>
         public static readonly DependencyProperty ActualIndependentValueProperty =
             DependencyProperty.Register(
                 "ActualIndependentValue",
-                typeof (object),
-                typeof (DataPoint),
-                new PropertyMetadata(OnActualIndependentValuePropertyChanged));
+                typeof(object),
+                typeof(DataPoint),
+                new FrameworkPropertyMetadata(OnActualIndependentValuePropertyChanged, CoerceActualIndependentValue));
+
+        private static object CoerceActualIndependentValue(DependencyObject d, object newValue)
+        {
+            double coercedValue;
+            if (!(newValue is double) && ValueHelper.TryConvert(newValue, out coercedValue))
+            {
+                return coercedValue;
+            }
+            return newValue;
+        }
 
         /// <summary>
         ///     Called when the ActualIndependentValue property changes.
@@ -647,7 +601,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private static void OnActualIndependentValuePropertyChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
+            var source = (DataPoint)d;
             object oldValue = e.OldValue;
             object newValue = e.NewValue;
             source.OnActualIndependentValuePropertyChanged(oldValue, newValue);
@@ -660,32 +614,10 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="newValue">The new value.</param>
         protected virtual void OnActualIndependentValuePropertyChanged(object oldValue, object newValue)
         {
-            double coercedValue = 0.0;
-            if (!(newValue is double) && ValueHelper.TryConvert(newValue, out coercedValue))
+            RoutedPropertyChangedEventHandler<object> handler = ActualIndependentValueChanged;
+            if (handler != null)
             {
-                _isCoercingActualIndependentValue = true;
-                _oldActualIndependentValueBeforeCoercion = oldValue;
-            }
-
-            if (!_isCoercingActualIndependentValue)
-            {
-                if (_oldActualIndependentValueBeforeCoercion != null)
-                {
-                    oldValue = _oldActualIndependentValueBeforeCoercion;
-                    _oldActualIndependentValueBeforeCoercion = null;
-                }
-
-                RoutedPropertyChangedEventHandler<object> handler = ActualIndependentValueChanged;
-                if (handler != null)
-                {
-                    handler(this, new RoutedPropertyChangedEventArgs<object>(oldValue, newValue));
-                }
-            }
-
-            if (_isCoercingActualIndependentValue)
-            {
-                _isCoercingActualIndependentValue = false;
-                ActualIndependentValue = coercedValue;
+                handler(this, new RoutedPropertyChangedEventArgs<object>(oldValue, newValue));
             }
         }
 
@@ -697,19 +629,13 @@ namespace System.Windows.Controls.DataVisualization.Charting
         internal event RoutedPropertyChangedEventHandler<DataPointState> StateChanged;
 
         #region public DataPointState State
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether the State property is being
-        ///     coerced to its previous value.
-        /// </summary>
-        private bool IsCoercingState { get; set; }
-
+        
         /// <summary>
         ///     Gets or sets the state of the data point.
         /// </summary>
         internal DataPointState State
         {
-            get { return (DataPointState) GetValue(StateProperty); }
+            get { return (DataPointState)GetValue(StateProperty); }
             set { SetValue(StateProperty, value); }
         }
 
@@ -719,9 +645,19 @@ namespace System.Windows.Controls.DataVisualization.Charting
         internal static readonly DependencyProperty StateProperty =
             DependencyProperty.Register(
                 "State",
-                typeof (DataPointState),
-                typeof (DataPoint),
-                new PropertyMetadata(DataPointState.Created, OnStatePropertyChanged));
+                typeof(DataPointState),
+                typeof(DataPoint),
+                new FrameworkPropertyMetadata(DataPointState.Created, OnStatePropertyChanged, CoerceState));
+
+        private static object CoerceState(DependencyObject d, object newValue)
+        {
+            var oldValue = ((DataPoint) d).State;
+            if ((DataPointState) newValue < oldValue)
+            {
+                return oldValue;
+            }
+            return newValue;
+        }
 
         /// <summary>
         ///     Called when the value of the State property changes.
@@ -730,9 +666,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnStatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPoint) d;
-            var oldValue = (DataPointState) e.OldValue;
-            var newValue = (DataPointState) e.NewValue;
+            var source = (DataPoint)d;
+            var oldValue = (DataPointState)e.OldValue;
+            var newValue = (DataPointState)e.NewValue;
             source.OnStatePropertyChanged(oldValue, newValue);
         }
 
@@ -743,61 +679,49 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="newValue">The new value.</param>
         protected virtual void OnStatePropertyChanged(DataPointState oldValue, DataPointState newValue)
         {
-            if (!IsCoercingState)
+            // If state ever goes to or past PendingRemoval, the DataPoint is no longer active
+            if (newValue >= DataPointState.PendingRemoval)
             {
-                // If state ever goes to or past PendingRemoval, the DataPoint is no longer active
-                if (DataPointState.PendingRemoval <= newValue)
+                IsActive = false;
+            }
+
+            // Update selection
+            if (DataPointState.Normal < newValue)
+            {
+                IsSelectionEnabled = false;
+            }
+
+            // Start state transition
+            bool transitionStarted = false;
+            switch (newValue)
+            {
+                case DataPointState.Showing:
+                case DataPointState.Hiding:
+                    transitionStarted = GoToCurrentRevealState();
+                    break;
+            }
+
+            // Fire Changed event
+            RoutedPropertyChangedEventHandler<DataPointState> handler = StateChanged;
+            if (handler != null)
+            {
+                handler(this, new RoutedPropertyChangedEventArgs<DataPointState>(oldValue, newValue));
+            }
+
+            // Change state if no transition started
+            if (!transitionStarted)
+            {
+                switch (newValue)
                 {
-                    IsActive = false;
-                }
-
-                if (newValue < oldValue)
-                {
-                    // If we've somehow gone backwards in the life cycle (other 
-                    // than when we go back to normal from updating) coerce to 
-                    // old value.
-                    IsCoercingState = true;
-                    State = oldValue;
-                    IsCoercingState = false;
-                }
-                else
-                {
-                    // Update selection
-                    if (newValue > DataPointState.Normal)
-                    {
-                        IsSelectionEnabled = false;
-                    }
-
-                    // Start state transition
-                    bool transitionStarted = false;
-                    switch (newValue)
-                    {
-                        case DataPointState.Showing:
-                        case DataPointState.Hiding:
-                            transitionStarted = GoToCurrentRevealState();
-                            break;
-                    }
-
-                    // Fire Changed event
-                    RoutedPropertyChangedEventHandler<DataPointState> handler = StateChanged;
-                    if (handler != null)
-                    {
-                        handler(this, new RoutedPropertyChangedEventArgs<DataPointState>(oldValue, newValue));
-                    }
-
-                    // Change state if no transition started
-                    if (!transitionStarted && _templateApplied)
-                    {
-                        switch (newValue)
+                    case DataPointState.Showing:
+                        if (_appliedTemplate)
                         {
-                            case DataPointState.Showing:
-                                State = DataPointState.Normal;
-                                break;
-                            case DataPointState.Hiding:
-                                State = DataPointState.Hidden;
-                                break;
+                            State = DataPointState.Normal;
                         }
-                    }
+                        break;
+                    case DataPointState.Hiding:
+                        State = DataPointState.Hidden;
+                        break;
                 }
             }
         }
@@ -830,10 +754,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         private bool _haveStateRevealHidden;
 
-        /// <summary>
-        ///     Tracks whether the template has been applied yet.
-        /// </summary>
-        private bool _templateApplied;
+        private bool _appliedTemplate;
 
         /// <summary>
         ///     Initializes a new instance of the DataPoint class.
@@ -890,37 +811,43 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public override void OnApplyTemplate()
         {
-            // Unhook CurrentStateChanged handler
-            VisualStateGroup groupReveal =
-                VisualStateManager.GetVisualStateGroups(ImplementationRoot)
-                    .Cast<VisualStateGroup>()
-                    .Where(group => GroupRevealStates == group.Name)
-                    .FirstOrDefault();
-            if (null != groupReveal)
+            VisualStateGroup groupReveal;
+
+            var implementationRoot = ImplementationRoot;
+            if (implementationRoot != null)
             {
-                groupReveal.CurrentStateChanged -= OnCurrentStateChanged;
+                // Unhook CurrentStateChanged handler
+                // ReSharper disable once AssignNullToNotNullAttribute
+                groupReveal = VisualStateManager.GetVisualStateGroups(implementationRoot)
+                    .Cast<VisualStateGroup>().FirstOrDefault(group => GroupRevealStates == group.Name);
+                if (groupReveal != null)
+                {
+                    groupReveal.CurrentStateChanged -= OnCurrentStateChanged;
+                }
             }
 
             base.OnApplyTemplate();
 
-            // Hook CurrentStateChanged handler
-            _haveStateRevealShown = false;
-            _haveStateRevealHidden = false;
-            groupReveal =
-                VisualStateManager.GetVisualStateGroups(ImplementationRoot)
-                    .Cast<VisualStateGroup>()
-                    .Where(group => GroupRevealStates == group.Name)
-                    .FirstOrDefault();
-            if (null != groupReveal)
+            implementationRoot = ImplementationRoot;
+            if (implementationRoot != null)
             {
-                groupReveal.CurrentStateChanged += OnCurrentStateChanged;
-                _haveStateRevealShown =
-                    groupReveal.States.Cast<VisualState>().Where(state => StateRevealShown == state.Name).Any();
-                _haveStateRevealHidden =
-                    groupReveal.States.Cast<VisualState>().Where(state => StateRevealHidden == state.Name).Any();
+                // Hook CurrentStateChanged handler
+                _haveStateRevealShown = false;
+                _haveStateRevealHidden = false;
+                // ReSharper disable once AssignNullToNotNullAttribute
+                groupReveal = VisualStateManager.GetVisualStateGroups(implementationRoot)
+                        .Cast<VisualStateGroup>().FirstOrDefault(group => GroupRevealStates == group.Name);
+                if (groupReveal != null)
+                {
+                    groupReveal.CurrentStateChanged += OnCurrentStateChanged;
+                    _haveStateRevealShown =
+                        groupReveal.States.Cast<VisualState>().Any(state => StateRevealShown == state.Name);
+                    _haveStateRevealHidden =
+                        groupReveal.States.Cast<VisualState>().Any(state => StateRevealHidden == state.Name);
+                }
             }
 
-            _templateApplied = true;
+            _appliedTemplate = true;
 
             // Go to current state(s)
             GoToCurrentRevealState();

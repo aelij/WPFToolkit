@@ -262,6 +262,11 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>The plot area coordinate.</returns>
         public override UnitValue GetPlotAreaCoordinate(object value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             Range<UnitValue> range = GetPlotAreaCoordinateRange(value);
             if (range.HasData)
             {

@@ -13,7 +13,58 @@ namespace System.Windows.Controls.DataVisualization.Charting
     /// <summary>
     ///     An axis that has a range.
     /// </summary>
-    public abstract class RangeAxis : DisplayAxis, IRangeAxis, IValueMarginConsumer
+    /// <remarks>This base class is for Style purposes.</remarks>
+    public abstract class RangeAxis : DisplayAxis
+    {
+#if !SILVERLIGHT
+        /// <summary>
+        ///     Initializes the static members of the RangeAxis class.
+        /// </summary>
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline",
+            Justification = "Dependency properties are initialized in-line.")]
+        static RangeAxis()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(RangeAxis),
+                new FrameworkPropertyMetadata(typeof(RangeAxis)));
+        }
+#endif
+
+        /// <summary>
+        ///     Instantiates a new instance of the RangeAxis class.
+        /// </summary>
+        // ReSharper disable once EmptyConstructor
+        protected RangeAxis()
+        {
+#if SILVERLIGHT
+            this.DefaultStyleKey = typeof(RangeAxis<T>);
+#endif
+        }
+
+        /// <summary>
+        ///     Identifies the MinorTickMarkStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty MinorTickMarkStyleProperty =
+            DependencyProperty.Register(
+                "MinorTickMarkStyle",
+                typeof(Style),
+                typeof(RangeAxis),
+                new PropertyMetadata(null));
+
+        /// <summary>
+        ///     Gets or sets the minor tick mark style.
+        /// </summary>
+        public Style MinorTickMarkStyle
+        {
+            get { return GetValue(MinorTickMarkStyleProperty) as Style; }
+            set { SetValue(MinorTickMarkStyleProperty, value); }
+        }
+    }
+
+    /// <summary>
+    ///     An axis that has a range.
+    /// </summary>
+    public abstract class RangeAxis<T> : RangeAxis, IRangeAxis, IValueMarginConsumer
+        where T : struct, IComparable
     {
         /// <summary>
         ///     A pool of major tick marks.
@@ -32,42 +83,23 @@ namespace System.Windows.Controls.DataVisualization.Charting
 
         #region public Style MinorTickMarkStyle
 
-        /// <summary>
-        ///     Gets or sets the minor tick mark style.
-        /// </summary>
-        public Style MinorTickMarkStyle
-        {
-            get { return GetValue(MinorTickMarkStyleProperty) as Style; }
-            set { SetValue(MinorTickMarkStyleProperty, value); }
-        }
-
-        /// <summary>
-        ///     Identifies the MinorTickMarkStyle dependency property.
-        /// </summary>
-        public static readonly DependencyProperty MinorTickMarkStyleProperty =
-            DependencyProperty.Register(
-                "MinorTickMarkStyle",
-                typeof (Style),
-                typeof (RangeAxis),
-                new PropertyMetadata(null));
-
         #endregion public Style MinorTickMarkStyle
 
         /// <summary>
         ///     The actual range of values.
         /// </summary>
-        private Range<IComparable> _actualRange;
+        private Range<T> _actualRange;
 
         /// <summary>
         ///     Gets or sets the actual range of values.
         /// </summary>
-        protected Range<IComparable> ActualRange
+        protected Range<T> ActualRange
         {
             get { return _actualRange; }
             set
             {
-                Range<IComparable> oldValue = _actualRange;
-                Range<IComparable> minMaxEnforcedValue = EnforceMaximumAndMinimum(value);
+                Range<T> oldValue = _actualRange;
+                Range<T> minMaxEnforcedValue = EnforceMaximumAndMinimum(value);
 
                 if (!oldValue.Equals(minMaxEnforcedValue))
                 {
@@ -81,20 +113,20 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     Identifies the ProtectedMaximum dependency property.
         /// </summary>
         protected static readonly DependencyProperty ProtectedMaximumProperty = DependencyProperty.Register(
-            "ProtectedMaximum", typeof (IComparable), typeof (RangeAxis),
+            "ProtectedMaximum", typeof(T?), typeof(RangeAxis<T>),
             new FrameworkPropertyMetadata(OnProtectedMaximumChanged, CoerceMaximum));
 
         private static void OnProtectedMaximumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var axis = (RangeAxis) d;
+            var axis = (RangeAxis<T>)d;
             axis.UpdateActualRange();
         }
 
         private static object CoerceMaximum(DependencyObject d, object value)
         {
-            var ctrl = (RangeAxis) d;
-            IComparable min = ctrl.ProtectedMinimum;
-            if (value != null && ((IComparable) value).CompareTo(min) < 0)
+            var ctrl = (RangeAxis<T>)d;
+            T? min = ctrl.ProtectedMinimum;
+            if (value != null && ((T)value).CompareTo(min) < 0)
             {
                 return min;
             }
@@ -104,9 +136,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     The maximum value displayed in the range axis.
         /// </summary>
-        protected IComparable ProtectedMaximum
+        protected T? ProtectedMaximum
         {
-            get { return (IComparable) GetValue(ProtectedMaximumProperty); }
+            get { return (T?)GetValue(ProtectedMaximumProperty); }
             set { SetValue(ProtectedMaximumProperty, value); }
         }
 
@@ -114,12 +146,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     Identifies the ProtectedMinimum dependency property.
         /// </summary>
         protected static readonly DependencyProperty ProtectedMinimumProperty = DependencyProperty.Register(
-            "ProtectedMinimum", typeof (IComparable), typeof (RangeAxis),
+            "ProtectedMinimum", typeof(T?), typeof(RangeAxis<T>),
             new FrameworkPropertyMetadata(OnProtectedMinimumChanged));
 
         private static void OnProtectedMinimumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var axis = (RangeAxis) d;
+            var axis = (RangeAxis<T>)d;
             axis.CoerceValue(ProtectedMaximumProperty);
             axis.UpdateActualRange();
         }
@@ -127,41 +159,31 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     The minimum value displayed in the range axis.
         /// </summary>
-        protected IComparable ProtectedMinimum
+        protected T? ProtectedMinimum
         {
-            get { return (IComparable) GetValue(ProtectedMinimumProperty); }
+            get { return (T?)GetValue(ProtectedMinimumProperty); }
             set { SetValue(ProtectedMinimumProperty, value); }
         }
-
-#if !SILVERLIGHT
-        /// <summary>
-        ///     Initializes the static members of the RangeAxis class.
-        /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline",
-            Justification = "Dependency properties are initialized in-line.")]
-        static RangeAxis()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof (RangeAxis),
-                new FrameworkPropertyMetadata(typeof (RangeAxis)));
-        }
-
-#endif
 
         /// <summary>
         ///     Instantiates a new instance of the RangeAxis class.
         /// </summary>
         protected RangeAxis()
         {
-#if SILVERLIGHT
-            this.DefaultStyleKey = typeof(RangeAxis);
-#endif
-            _labelPool = new ObjectPool<Control>(() => CreateAxisLabel());
-            _majorTickMarkPool = new ObjectPool<Line>(() => CreateMajorTickMark());
-            _minorTickMarkPool = new ObjectPool<Line>(() => CreateMinorTickMark());
+            _labelPool = new ObjectPool<Control>(CreateAxisLabel);
+            _majorTickMarkPool = new ObjectPool<Line>(CreateMajorTickMark);
+            _minorTickMarkPool = new ObjectPool<Line>(CreateMinorTickMark);
 
             // Update actual range when size changes for the first time.  This
             // is necessary because the value margins may have changed after
             // the first layout pass.
+            //SizeChangedEventHandler handler = null;
+            //handler = delegate
+            //{
+            //    SizeChanged -= handler;
+            //    UpdateActualRange();
+            //};
+            //SizeChanged += handler;
         }
 
         /// <summary>
@@ -177,7 +199,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     Invalidates axis when the actual range changes.
         /// </summary>
         /// <param name="range">The new actual range.</param>
-        protected virtual void OnActualRangeChanged(Range<IComparable> range)
+        protected virtual void OnActualRangeChanged(Range<T> range)
         {
             Invalidate();
         }
@@ -192,6 +214,11 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>The plot area coordinate of the given value.</returns>
         public override UnitValue GetPlotAreaCoordinate(object value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             return GetPlotAreaCoordinate(value, ActualRange, ActualLength);
         }
 
@@ -208,14 +235,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </param>
         /// <param name="length">The length of the axis.</param>
         /// <returns>The plot area coordinate of the given value.</returns>
-        protected abstract UnitValue GetPlotAreaCoordinate(object value, Range<IComparable> currentRange, double length);
+        protected abstract UnitValue GetPlotAreaCoordinate(object value, Range<T> currentRange, double length);
 
         /// <summary>
         ///     Overrides the data range.
         /// </summary>
         /// <param name="range">The range to potentially override.</param>
         /// <returns>The overridden range.</returns>
-        protected virtual Range<IComparable> OverrideDataRange(Range<IComparable> range)
+        protected virtual Range<T> OverrideDataRange(Range<T> range)
         {
             return range;
         }
@@ -228,31 +255,31 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     A range modified to  respect the minimum and maximum axis
         ///     values.
         /// </returns>
-        private Range<IComparable> EnforceMaximumAndMinimum(Range<IComparable> range)
+        private Range<T> EnforceMaximumAndMinimum(Range<T> range)
         {
             if (range.HasData)
             {
-                IComparable minimum = ProtectedMinimum ?? range.Minimum;
-                IComparable maximum = ProtectedMaximum ?? range.Maximum;
+                var minimum = ProtectedMinimum ?? range.Minimum;
+                var maximum = ProtectedMaximum ?? range.Maximum;
 
                 if (ValueHelper.Compare(minimum, maximum) > 0)
                 {
-                    IComparable temp = maximum;
+                    var temp = maximum;
                     maximum = minimum;
                     minimum = temp;
                 }
 
-                return new Range<IComparable>(minimum, maximum);
+                return new Range<T>(minimum, maximum);
             }
             else
             {
-                IComparable minimum = ProtectedMinimum;
-                IComparable maximum = ProtectedMaximum;
-                if (ProtectedMinimum != null && ProtectedMaximum == null)
+                var minimum = ProtectedMinimum;
+                var maximum = ProtectedMaximum;
+                if (minimum != null && maximum == null)
                 {
                     maximum = minimum;
                 }
-                else if (ProtectedMaximum != null && ProtectedMinimum == null)
+                else if (maximum != null && minimum == null)
                 {
                     minimum = maximum;
                 }
@@ -260,7 +287,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 {
                     return range;
                 }
-                return new Range<IComparable>(minimum, maximum);
+                return new Range<T>(minimum.Value, maximum.Value);
             }
         }
 
@@ -271,34 +298,30 @@ namespace System.Windows.Controls.DataVisualization.Charting
         {
             Action action = () =>
             {
-                Range<IComparable> dataRange;
                 if (ProtectedMaximum == null || ProtectedMinimum == null)
                 {
                     if (Orientation == AxisOrientation.None)
                     {
+                        var range = new Range<T>();
                         if (ProtectedMinimum != null)
-                        {
-                            ActualRange = OverrideDataRange(new Range<IComparable>(ProtectedMinimum, ProtectedMinimum));
-                        }
-                        else
-                        {
-                            ActualRange = OverrideDataRange(new Range<IComparable>(ProtectedMaximum, ProtectedMaximum));
-                        }
+                            range = new Range<T>(ProtectedMinimum.Value, ProtectedMinimum.Value);
+                        else if (ProtectedMaximum != null)
+                            range = new Range<T>(ProtectedMaximum.Value, ProtectedMaximum.Value);
+                        ActualRange = OverrideDataRange(range);
                     }
                     else
                     {
-                        dataRange =
-                            RegisteredListeners
-                                .OfType<IRangeProvider>()
-                                .Select(rangeProvider => rangeProvider.GetRange(this))
-                                .Sum();
+                        Range<T> dataRange = RegisteredListeners
+                            .OfType<IRangeProvider>()
+                            .Select(rangeProvider => rangeProvider.GetRange(this).As<T>())
+                            .Sum();
 
                         ActualRange = OverrideDataRange(dataRange);
                     }
                 }
                 else
                 {
-                    ActualRange = new Range<IComparable>(ProtectedMinimum, ProtectedMaximum);
+                    ActualRange = new Range<T>(ProtectedMinimum.Value, ProtectedMaximum.Value);
                 }
             };
 
@@ -327,7 +350,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 OrientedPanel.Children.Clear();
                 if (ActualRange.HasData && !Equals(ActualRange.Minimum, ActualRange.Maximum))
                 {
-                    foreach (IComparable axisValue in GetMajorTickMarkValues(availableSize))
+                    foreach (T axisValue in GetMajorTickMarkValues(availableSize))
                     {
                         UnitValue coordinate = GetPlotAreaCoordinate(axisValue, ActualRange, length);
                         if (ValueHelper.CanGraph(coordinate.Value))
@@ -339,7 +362,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                         }
                     }
 
-                    foreach (IComparable axisValue in GetMinorTickMarkValues(availableSize))
+                    foreach (T axisValue in GetMinorTickMarkValues(availableSize))
                     {
                         UnitValue coordinate = GetPlotAreaCoordinate(axisValue, ActualRange, length);
                         if (ValueHelper.CanGraph(coordinate.Value))
@@ -352,7 +375,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                     }
 
                     int count = 0;
-                    foreach (IComparable axisValue in GetLabelValues(availableSize))
+                    foreach (T axisValue in GetLabelValues(availableSize))
                     {
                         UnitValue coordinate = GetPlotAreaCoordinate(axisValue, ActualRange, length);
                         if (ValueHelper.CanGraph(coordinate.Value))
@@ -362,7 +385,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                             OrientedPanel.SetCenterCoordinate(axisLabel, coordinate.Value);
                             OrientedPanel.SetPriority(axisLabel, count + 1);
                             OrientedPanel.Children.Add(axisLabel);
-                            count = (count + 1)%2;
+                            count = (count + 1) % 2;
                         }
                     }
                 }
@@ -409,7 +432,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
             Justification = "This method may do a lot of work and is therefore not a suitable candidate for a property."
             )]
-        protected virtual IEnumerable<IComparable> GetMajorGridLineValues(Size availableSize)
+        protected virtual IEnumerable<T> GetMajorGridLineValues(Size availableSize)
         {
             return GetMajorTickMarkValues(availableSize);
         }
@@ -422,7 +445,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
             Justification = "This method may do a lot of work and is therefore not a suitable candidate for a property."
             )]
-        protected abstract IEnumerable<IComparable> GetMajorTickMarkValues(Size availableSize);
+        protected abstract IEnumerable<T> GetMajorTickMarkValues(Size availableSize);
 
         /// <summary>
         ///     Returns a sequence of values to plot on the axis.
@@ -432,7 +455,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
             Justification = "This method may do a lot of work and is therefore not a suitable candidate for a property."
             )]
-        protected virtual IEnumerable<IComparable> GetMinorTickMarkValues(Size availableSize)
+        protected virtual IEnumerable<T> GetMinorTickMarkValues(Size availableSize)
         {
             yield break;
         }
@@ -445,21 +468,21 @@ namespace System.Windows.Controls.DataVisualization.Charting
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate",
             Justification = "This method may do a lot of work and is therefore not a suitable candidate for a property."
             )]
-        protected abstract IEnumerable<IComparable> GetLabelValues(Size availableSize);
+        protected abstract IEnumerable<T> GetLabelValues(Size availableSize);
 
         /// <summary>
         ///     Returns the value range given a plot area coordinate.
         /// </summary>
         /// <param name="value">The plot area coordinate.</param>
         /// <returns>A range of values at that plot area coordinate.</returns>
-        protected abstract IComparable GetValueAtPosition(UnitValue value);
+        protected abstract T? GetValueAtPosition(UnitValue value);
 
         /// <summary>
         ///     Gets the actual maximum value.
         /// </summary>
         Range<IComparable> IRangeAxis.Range
         {
-            get { return ActualRange; }
+            get { return new Range<IComparable>(ActualRange.Minimum, ActualRange.Maximum); }
         }
 
         /// <summary>
@@ -499,17 +522,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 {
                     // Determine if any of the value margins are outside the axis
                     // area.  If so update range.
-                    bool updateRange =
-                        valueMargins
-                            .Select(
-                                valueMargin =>
-                                {
-                                    double coordinate = GetPlotAreaCoordinate(valueMargin.Value).Value;
-                                    return new Range<double>(coordinate - valueMargin.LowMargin,
-                                        coordinate + valueMargin.HighMargin);
-                                })
-                            .Where(range => range.Minimum < 0 || range.Maximum > ActualLength)
-                            .Any();
+                    bool updateRange = valueMargins
+                        .Select(valueMargin =>
+                        {
+                            double coordinate = GetPlotAreaCoordinate(valueMargin.Value).Value;
+                            return new Range<double>(coordinate - valueMargin.LowMargin,
+                                coordinate + valueMargin.HighMargin);
+                        })
+                        .Any(range => range.Minimum < 0 || range.Maximum > ActualLength);
 
                     if (updateRange)
                     {
@@ -564,7 +584,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="valueMargins">The list of value margins, coordinates, and overlaps.</param>
         /// <param name="comparableRange">The new range to use to calculate coordinates.</param>
         internal void UpdateValueMargins(IList<ValueMarginCoordinateAndOverlap> valueMargins,
-            Range<IComparable> comparableRange)
+            Range<T> comparableRange)
         {
             double actualLength = ActualLength;
             int valueMarginsCount = valueMargins.Count;
@@ -630,6 +650,6 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     Gets the origin value on the axis.
         /// </summary>
-        protected abstract IComparable Origin { get; }
+        protected abstract T? Origin { get; }
     }
 }

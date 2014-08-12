@@ -14,7 +14,6 @@ namespace System.Windows.Controls.DataVisualization
     /// <typeparam name="T">The type of the values.</typeparam>
     /// <QualityBand>Preview</QualityBand>
     public struct Range<T>
-        where T : IComparable
     {
         /// <summary>
         ///     A flag that determines whether the range is empty or not.
@@ -78,10 +77,12 @@ namespace System.Windows.Controls.DataVisualization
         /// <param name="maximum">The maximum value.</param>
         public Range(T minimum, T maximum)
         {
+            // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (minimum == null)
             {
                 throw new ArgumentNullException("minimum");
             }
+            // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (maximum == null)
             {
                 throw new ArgumentNullException("maximum");
@@ -91,7 +92,7 @@ namespace System.Windows.Controls.DataVisualization
             _minimum = minimum;
             _maximum = maximum;
 
-            int compareValue = ValueHelper.Compare(minimum, maximum);
+            int compareValue = Comparer<T>.Default.Compare(minimum, maximum);
             if (compareValue == 1)
             {
                 throw new InvalidOperationException(
@@ -135,6 +136,22 @@ namespace System.Windows.Controls.DataVisualization
         }
 
         /// <summary>
+        /// Casts the range to another type.
+        /// </summary>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        // ReSharper disable once InconsistentNaming
+        public Range<K> As<K>()
+            where K : T
+        {
+            if (!HasData)
+            {
+                return new Range<K>();
+            }
+            return new Range<K>((K)Minimum, (K)Maximum);
+        }
+
+        /// <summary>
         ///     Adds a range to the current range.
         /// </summary>
         /// <param name="range">A range to add to the current range.</param>
@@ -152,8 +169,8 @@ namespace System.Windows.Controls.DataVisualization
             {
                 return this;
             }
-            T minimum = ValueHelper.Compare(Minimum, range.Minimum) == -1 ? Minimum : range.Minimum;
-            T maximum = ValueHelper.Compare(Maximum, range.Maximum) == 1 ? Maximum : range.Maximum;
+            T minimum = Comparer<T>.Default.Compare(Minimum, range.Minimum) == -1 ? Minimum : range.Minimum;
+            T maximum = Comparer<T>.Default.Compare(Maximum, range.Maximum) == 1 ? Maximum : range.Maximum;
             return new Range<T>(minimum, maximum);
         }
 
@@ -177,11 +194,7 @@ namespace System.Windows.Controls.DataVisualization
         /// </returns>
         public override bool Equals(object obj)
         {
-            var range = (Range<T>) obj;
-            if (range == null)
-            {
-                return false;
-            }
+            var range = (Range<T>)obj;
             return this == range;
         }
 
@@ -192,32 +205,8 @@ namespace System.Windows.Controls.DataVisualization
         /// <returns>Whether the value is within the range.</returns>
         public bool Contains(T value)
         {
-            return ValueHelper.Compare(Minimum, value) <= 0 && ValueHelper.Compare(value, Maximum) <= 0;
+            return Comparer<T>.Default.Compare(Minimum, value) <= 0 && Comparer<T>.Default.Compare(value, Maximum) <= 0;
         }
-
-        /////// <summary>
-        /////// Returns a new range that contains the value.
-        /////// </summary>
-        /////// <param name="value">The value to extend the range to.</param>
-        /////// <returns>The range which contains the value.</returns>
-        ////public Range<T> ExtendTo(T value)
-        ////{
-        ////    if (!HasData)
-        ////    {
-        ////        return new Range<T>(value, value);
-        ////    }
-
-        ////    if (ValueHelper.Compare(Minimum, value) > 0)
-        ////    {
-        ////        return new Range<T>(value, Maximum);
-        ////    }
-        ////    else if (ValueHelper.Compare(Maximum, value) < 0)
-        ////    {
-        ////        return new Range<T>(Minimum, value);
-        ////    }
-
-        ////    return this;
-        ////}
 
         /// <summary>
         ///     Returns a value indicating whether two ranges intersect.
@@ -233,11 +222,11 @@ namespace System.Windows.Controls.DataVisualization
 
             Func<Range<T>, Range<T>, bool> rightCollidesWithLeft =
                 (leftRange, rightRange) =>
-                    (ValueHelper.Compare(rightRange.Minimum, leftRange.Maximum) <= 0 &&
-                     ValueHelper.Compare(rightRange.Minimum, leftRange.Minimum) >= 0)
+                    (Comparer<T>.Default.Compare(rightRange.Minimum, leftRange.Maximum) <= 0 &&
+                     Comparer<T>.Default.Compare(rightRange.Minimum, leftRange.Minimum) >= 0)
                     ||
-                    (ValueHelper.Compare(leftRange.Minimum, rightRange.Maximum) <= 0 &&
-                     ValueHelper.Compare(leftRange.Minimum, rightRange.Minimum) >= 0);
+                    (Comparer<T>.Default.Compare(leftRange.Minimum, rightRange.Maximum) <= 0 &&
+                     Comparer<T>.Default.Compare(leftRange.Minimum, rightRange.Minimum) >= 0);
 
             return rightCollidesWithLeft(this, range) || rightCollidesWithLeft(range, this);
         }
@@ -254,8 +243,8 @@ namespace System.Windows.Controls.DataVisualization
             }
 
             int num = 0x5374e861;
-            num = (-1521134295*num) + EqualityComparer<T>.Default.GetHashCode(Minimum);
-            return ((-1521134295*num) + EqualityComparer<T>.Default.GetHashCode(Maximum));
+            num = (-1521134295 * num) + EqualityComparer<T>.Default.GetHashCode(Minimum);
+            return ((-1521134295 * num) + EqualityComparer<T>.Default.GetHashCode(Maximum));
         }
 
         /// <summary>

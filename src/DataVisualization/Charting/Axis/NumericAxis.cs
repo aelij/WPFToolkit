@@ -4,14 +4,13 @@
 // All other rights reserved.
 
 using System.ComponentModel;
-using EF = System.Windows.Controls.DataVisualization.EnumerableFunctions;
 
 namespace System.Windows.Controls.DataVisualization.Charting
 {
     /// <summary>
     ///     An axis that displays numeric values.
     /// </summary>
-    public abstract class NumericAxis : RangeAxis
+    public abstract class NumericAxis : RangeAxis<double>
     {
         #region public double? ActualMaximum
 
@@ -199,7 +198,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     Gets the origin value on the axis.
         /// </summary>
-        protected override IComparable Origin
+        protected override double? Origin
         {
             get { return 0.0; }
         }
@@ -209,12 +208,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     actual range changes.
         /// </summary>
         /// <param name="range">The actual range.</param>
-        protected override void OnActualRangeChanged(Range<IComparable> range)
+        protected override void OnActualRangeChanged(Range<double> range)
         {
             if (range.HasData)
             {
-                ActualMaximum = (double) range.Maximum;
-                ActualMinimum = (double) range.Minimum;
+                ActualMaximum = range.Maximum;
+                ActualMinimum = range.Minimum;
             }
             else
             {
@@ -254,17 +253,17 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     A range that can store both the data values and their
         ///     margins.
         /// </returns>
-        protected override Range<IComparable> OverrideDataRange(Range<IComparable> range)
+        protected override Range<double> OverrideDataRange(Range<double> range)
         {
             range = base.OverrideDataRange(range);
 
             if (ExtendRangeToOrigin)
             {
-                Range<double> adjustedRange = range.ToDoubleRange();
+                Range<double> adjustedRange = range;
 
                 if (!adjustedRange.HasData)
                 {
-                    return new Range<IComparable>(0.0, 0.0);
+                    return new Range<double>(0.0, 0.0);
                 }
                 double minimum = adjustedRange.Minimum;
                 double maximum = adjustedRange.Maximum;
@@ -276,7 +275,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 {
                     maximum = 0.0;
                 }
-                return new Range<IComparable>(minimum, maximum);
+                return new Range<double>(minimum, maximum);
             }
             return range;
         }

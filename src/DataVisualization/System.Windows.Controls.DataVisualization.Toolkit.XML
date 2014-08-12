@@ -249,17 +249,6 @@
             <param name="d">Control that changed its ActualDependentValue.</param>
             <param name="e">Event arguments.</param>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._isCoercingActualDependentValue">
-            <summary>
-                A value indicating whether the actual independent value is being
-                coerced.
-            </summary>
-        </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._oldActualDependentValueBeforeCoercion">
-            <summary>
-                The preserved previous actual dependent value before coercion.
-            </summary>
-        </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPoint.OnActualDependentValuePropertyChanged(System.IComparable,System.IComparable)">
             <summary>
                 Called when the value of the ActualDependentValue property changes.
@@ -353,17 +342,6 @@
             <param name="oldValue">The value to be replaced.</param>
             <param name="newValue">The new value.</param>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._isCoercingActualIndependentValue">
-            <summary>
-                A value indicating whether the actual independent value is being
-                coerced.
-            </summary>
-        </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._oldActualIndependentValueBeforeCoercion">
-            <summary>
-                The preserved previous actual dependent value before coercion.
-            </summary>
-        </member>
         <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint.ActualIndependentValueProperty">
             <summary>
                 Identifies the ActualIndependentValue dependency property.
@@ -410,11 +388,6 @@
         <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._haveStateRevealHidden">
             <summary>
                 Tracks whether the Reveal/Hidden VisualState is available.
-            </summary>
-        </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.DataPoint._templateApplied">
-            <summary>
-                Tracks whether the template has been applied yet.
             </summary>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPoint.#ctor">
@@ -494,12 +467,6 @@
                 the data point.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.DataPoint.IsCoercingIsSelected">
-            <summary>
-                Gets or sets a value indicating whether the IsSelected property is
-                being coerced.
-            </summary>
-        </member>
         <member name="P:System.Windows.Controls.DataVisualization.Charting.DataPoint.IsSelected">
             <summary>
                 Gets or sets a value indicating whether the data point is selected.
@@ -570,12 +537,6 @@
         <member name="E:System.Windows.Controls.DataVisualization.Charting.DataPoint.StateChanged">
             <summary>
                 Occurs when the state of a data point is changed.
-            </summary>
-        </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.DataPoint.IsCoercingState">
-            <summary>
-                Gets or sets a value indicating whether the State property is being
-                coerced to its previous value.
             </summary>
         </member>
         <member name="P:System.Windows.Controls.DataVisualization.Charting.DataPoint.State">
@@ -1769,9 +1730,35 @@
                 An axis that displays numeric values.
             </summary>
         </member>
+        <member name="T:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1">
+            <summary>
+                An axis that has a range.
+            </summary>
+        </member>
         <member name="T:System.Windows.Controls.DataVisualization.Charting.RangeAxis">
             <summary>
                 An axis that has a range.
+            </summary>
+            <remarks>This base class is for Style purposes.</remarks>
+        </member>
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.#cctor">
+            <summary>
+                Initializes the static members of the RangeAxis class.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.#ctor">
+            <summary>
+                Instantiates a new instance of the RangeAxis class.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis.MinorTickMarkStyleProperty">
+            <summary>
+                Identifies the MinorTickMarkStyle dependency property.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.MinorTickMarkStyle">
+            <summary>
+                Gets or sets the minor tick mark style.
             </summary>
         </member>
         <member name="T:System.Windows.Controls.DataVisualization.Charting.IRangeAxis">
@@ -1799,64 +1786,54 @@
                 Gets the origin value on the axis.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis._majorTickMarkPool">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1._majorTickMarkPool">
             <summary>
                 A pool of major tick marks.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis._minorTickMarkPool">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1._minorTickMarkPool">
             <summary>
                 A pool of major tick marks.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis._labelPool">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1._labelPool">
             <summary>
                 A pool of labels.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis.MinorTickMarkStyleProperty">
-            <summary>
-                Identifies the MinorTickMarkStyle dependency property.
-            </summary>
-        </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis._actualRange">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1._actualRange">
             <summary>
                 The actual range of values.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis.ProtectedMaximumProperty">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.ProtectedMaximumProperty">
             <summary>
                 Identifies the ProtectedMaximum dependency property.
             </summary>
         </member>
-        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis.ProtectedMinimumProperty">
+        <member name="F:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.ProtectedMinimumProperty">
             <summary>
                 Identifies the ProtectedMinimum dependency property.
             </summary>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.#cctor">
-            <summary>
-                Initializes the static members of the RangeAxis class.
-            </summary>
-        </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.#ctor">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.#ctor">
             <summary>
                 Instantiates a new instance of the RangeAxis class.
             </summary>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.CreateMinorTickMark">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.CreateMinorTickMark">
             <summary>
                 Creates a minor axis tick mark.
             </summary>
             <returns>A line to used to render a tick mark.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{`0})">
             <summary>
                 Invalidates axis when the actual range changes.
             </summary>
             <param name="range">The new actual range.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetPlotAreaCoordinate(System.Object)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetPlotAreaCoordinate(System.Object)">
             <summary>
                 Returns the plot area coordinate of a given value.
             </summary>
@@ -1866,7 +1843,7 @@
             </param>
             <returns>The plot area coordinate of the given value.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{System.IComparable},System.Double)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{`0},System.Double)">
             <summary>
                 Returns the plot area coordinate of a given value.
             </summary>
@@ -1881,14 +1858,14 @@
             <param name="length">The length of the axis.</param>
             <returns>The plot area coordinate of the given value.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{`0})">
             <summary>
                 Overrides the data range.
             </summary>
             <param name="range">The range to potentially override.</param>
             <returns>The overridden range.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.EnforceMaximumAndMinimum(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.EnforceMaximumAndMinimum(System.Windows.Controls.DataVisualization.Range{`0})">
             <summary>
                 Modifies a range to respect the minimum and maximum axis values.
             </summary>
@@ -1898,31 +1875,31 @@
                 values.
             </returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.UpdateActualRange">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.UpdateActualRange">
             <summary>
                 Updates the actual range displayed on the axis.
             </summary>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.RenderOriented(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.RenderOriented(System.Windows.Size)">
             <summary>
                 Renders the axis as an oriented axis.
             </summary>
             <param name="availableSize">The available size.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.Render(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.Render(System.Windows.Size)">
             <summary>
                 Renders the axis labels, tick marks, and other visual elements.
             </summary>
             <param name="availableSize">The available size.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetMajorGridLineCoordinates(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetMajorGridLineCoordinates(System.Windows.Size)">
             <summary>
                 Returns a sequence of the major grid line coordinates.
             </summary>
             <param name="availableSize">The available size.</param>
             <returns>A sequence of the major grid line coordinates.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetMajorGridLineValues(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetMajorGridLineValues(System.Windows.Size)">
             <summary>
                 Returns a sequence of the values at which to plot major grid lines.
             </summary>
@@ -1931,42 +1908,42 @@
                 A sequence of the values at which to plot major grid lines.
             </returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetMajorTickMarkValues(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetMajorTickMarkValues(System.Windows.Size)">
             <summary>
                 Returns a sequence of values to plot on the axis.
             </summary>
             <param name="availableSize">The available size.</param>
             <returns>A sequence of values to plot on the axis.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetMinorTickMarkValues(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetMinorTickMarkValues(System.Windows.Size)">
             <summary>
                 Returns a sequence of values to plot on the axis.
             </summary>
             <param name="availableSize">The available size.</param>
             <returns>A sequence of values to plot on the axis.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetLabelValues(System.Windows.Size)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetLabelValues(System.Windows.Size)">
             <summary>
                 Returns a sequence of values to plot on the axis.
             </summary>
             <param name="availableSize">The available size.</param>
             <returns>A sequence of values to plot on the axis.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetValueAtPosition(System.Windows.Controls.DataVisualization.UnitValue)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetValueAtPosition(System.Windows.Controls.DataVisualization.UnitValue)">
             <summary>
                 Returns the value range given a plot area coordinate.
             </summary>
             <param name="value">The plot area coordinate.</param>
             <returns>A range of values at that plot area coordinate.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#GetValueAtPosition(System.Windows.Controls.DataVisualization.UnitValue)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#GetValueAtPosition(System.Windows.Controls.DataVisualization.UnitValue)">
             <summary>
                 Returns the value range given a plot area coordinate.
             </summary>
             <param name="value">The plot area coordinate.</param>
             <returns>A range of values at that plot area coordinate.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.System#Windows#Controls#DataVisualization#Charting#IRangeConsumer#RangeChanged(System.Windows.Controls.DataVisualization.Charting.IRangeProvider,System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.System#Windows#Controls#DataVisualization#Charting#IRangeConsumer#RangeChanged(System.Windows.Controls.DataVisualization.Charting.IRangeProvider,System.Windows.Controls.DataVisualization.Range{System.IComparable})">
             <summary>
                 Updates the axis with information about a provider's data range.
             </summary>
@@ -1975,7 +1952,7 @@
                 The range of data in the information provider.
             </param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.System#Windows#Controls#DataVisualization#Charting#IValueMarginConsumer#ValueMarginsChanged(System.Windows.Controls.DataVisualization.Charting.IValueMarginProvider,System.Collections.Generic.IEnumerable{System.Windows.Controls.DataVisualization.Charting.ValueMargin})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.System#Windows#Controls#DataVisualization#Charting#IValueMarginConsumer#ValueMarginsChanged(System.Windows.Controls.DataVisualization.Charting.IValueMarginProvider,System.Collections.Generic.IEnumerable{System.Windows.Controls.DataVisualization.Charting.ValueMargin})">
             <summary>
                 Updates the layout of the axis to accommodate a sequence of value
                 margins.
@@ -1983,19 +1960,19 @@
             <param name="provider">A value margin provider.</param>
             <param name="valueMargins">A sequence of value margins.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.OnObjectRegistered(System.Windows.Controls.DataVisualization.Charting.IAxisListener)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.OnObjectRegistered(System.Windows.Controls.DataVisualization.Charting.IAxisListener)">
             <summary>
                 If a new range provider is registered, update actual range.
             </summary>
             <param name="series">The axis listener being registered.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.OnObjectUnregistered(System.Windows.Controls.DataVisualization.Charting.IAxisListener)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.OnObjectUnregistered(System.Windows.Controls.DataVisualization.Charting.IAxisListener)">
             <summary>
                 If a range provider is unregistered, update actual range.
             </summary>
             <param name="series">The axis listener being unregistered.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.UpdateValueMargins(System.Collections.Generic.IList{System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap},System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.UpdateValueMargins(System.Collections.Generic.IList{System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap},System.Windows.Controls.DataVisualization.Range{`0})">
             <summary>
                 Create function that when given a range will return the
                 amount in pixels by which the value margin range
@@ -2005,7 +1982,7 @@
             <param name="valueMargins">The list of value margins, coordinates, and overlaps.</param>
             <param name="comparableRange">The new range to use to calculate coordinates.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis.GetMaxLeftAndRightOverlap(System.Collections.Generic.IList{System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap},System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap@,System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap@)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.GetMaxLeftAndRightOverlap(System.Collections.Generic.IList{System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap},System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap@,System.Windows.Controls.DataVisualization.Charting.ValueMarginCoordinateAndOverlap@)">
             <summary>
                 Returns the value margin, coordinate, and overlap triples that have the largest left and right overlap.
             </summary>
@@ -2022,37 +1999,32 @@
                 coordinate, and overlap triple that has the largest right overlap.
             </param>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.MinorTickMarkStyle">
-            <summary>
-                Gets or sets the minor tick mark style.
-            </summary>
-        </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.ActualRange">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.ActualRange">
             <summary>
                 Gets or sets the actual range of values.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.ProtectedMaximum">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.ProtectedMaximum">
             <summary>
                 The maximum value displayed in the range axis.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.ProtectedMinimum">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.ProtectedMinimum">
             <summary>
                 The minimum value displayed in the range axis.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#Range">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#Range">
             <summary>
                 Gets the actual maximum value.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#Origin">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.System#Windows#Controls#DataVisualization#Charting#IRangeAxis#Origin">
             <summary>
                 Gets the origin value on the axis.
             </summary>
         </member>
-        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis.Origin">
+        <member name="P:System.Windows.Controls.DataVisualization.Charting.RangeAxis`1.Origin">
             <summary>
                 Gets the origin value on the axis.
             </summary>
@@ -2153,13 +2125,6 @@
                 Instantiates a new instance of the DateTimeAxis2 class.
             </summary>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.ToDateTimeRange(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
-            <summary>
-                Converts a range to a range of type DateTime.
-            </summary>
-            <param name="range">A range to be converted.</param>
-            <returns>A range that has been converted.</returns>
-        </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.CreateAxisLabel">
             <summary>
                 Creates a new instance of the DateTimeAxisLabel class.
@@ -2180,7 +2145,7 @@
                 The data context to assign to the label.
             </param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{System.DateTime})">
             <summary>
                 Updates the typed actual maximum and minimum properties when the
                 actual range changes.
@@ -2194,7 +2159,7 @@
             <param name="value">The value to plot.</param>
             <returns>A value indicating whether a value can plot.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{System.IComparable},System.Double)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{System.DateTime},System.Double)">
             <summary>
                 Returns the plot area coordinate of a value.
             </summary>
@@ -2275,7 +2240,7 @@
             <param name="availableSize">The available size.</param>
             <returns>Auto Interval.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.DateTimeAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.DateTime})">
             <summary>
                 Overrides the actual range to ensure that it is never set to an
                 empty range.
@@ -2716,7 +2681,7 @@
             <param name="oldValue">Old value.</param>
             <param name="newValue">New value.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.NumericAxis.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.NumericAxis.OnActualRangeChanged(System.Windows.Controls.DataVisualization.Range{System.Double})">
             <summary>
                 Updates the typed actual maximum and minimum properties when the
                 actual range changes.
@@ -2736,7 +2701,7 @@
             </summary>
             <returns>A numeric axis label.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.NumericAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.NumericAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.Double})">
             <summary>
                 Overrides the data value range and returns a range that takes the
                 margins of the values into account.
@@ -2804,7 +2769,7 @@
                 Instantiates a new instance of the LinearAxis class.
             </summary>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.LinearAxis.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{System.IComparable},System.Double)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.LinearAxis.GetPlotAreaCoordinate(System.Object,System.Windows.Controls.DataVisualization.Range{System.Double},System.Double)">
             <summary>
                 Returns the plot area coordinate of a value.
             </summary>
@@ -2865,17 +2830,7 @@
             <param name="value">The plot area position.</param>
             <returns>The value at that plot area coordinate.</returns>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.LinearAxis.LengthToRange(System.Double,System.Double)">
-            <summary>
-                Function that uses the mid point of all the data values
-                in the value margins to convert a length into a range
-                of data with the mid point as the center of that range.
-            </summary>
-            <param name="midPoint">The mid point of the range.</param>
-            <param name="length">The length of the range.</param>
-            <returns>The range object.</returns>
-        </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.LinearAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.IComparable})">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.LinearAxis.OverrideDataRange(System.Windows.Controls.DataVisualization.Range{System.Double})">
             <summary>
                 Overrides the actual range to ensure that it is never set to an
                 empty range.
@@ -3529,11 +3484,10 @@
             </returns>
             <param name="owner">The owner of the new LegendItem.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.ItemsSourceCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.ItemsSourceCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
                 Method that handles the ObservableCollection.CollectionChanged event for the ItemsSource property.
             </summary>
-            <param name="sender">The object that raised the event.</param>
             <param name="e">The event data.</param>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.LoadDataPoints(System.Collections.IEnumerable,System.Collections.IEnumerable)">
@@ -3693,14 +3647,13 @@
             <param name="dataPoint">A data point.</param>
             <param name="dataContext">A data context object.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.StaggeredStateChange(System.Collections.Generic.IEnumerable{System.Windows.Controls.DataVisualization.Charting.DataPoint},System.Int32,System.Windows.Controls.DataVisualization.Charting.DataPointState)">
+        <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.StaggeredStateChange(System.Collections.Generic.IList{System.Windows.Controls.DataVisualization.Charting.DataPoint},System.Windows.Controls.DataVisualization.Charting.DataPointState)">
             <summary>
                 Reveals data points using a storyboard.
             </summary>
             <param name="dataPoints">
                 The data points to change the state of.
             </param>
-            <param name="dataPointCount">The number of data points in the sequence.</param>
             <param name="newState">The state to change to.</param>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.Charting.DataPointSeries.OnDataPointStateChanged(System.Object,System.Windows.RoutedPropertyChangedEventArgs{System.Windows.Controls.DataVisualization.Charting.DataPointState})">
@@ -7141,7 +7094,7 @@
             <param name="value">The value associated with the units.</param>
             <param name="unit">The units associated with the value.</param>
         </member>
-        <member name="M:System.Windows.Controls.DataVisualization.UnitValue.CompareTo(System.Object)">
+        <member name="M:System.Windows.Controls.DataVisualization.UnitValue.CompareTo(System.Windows.Controls.DataVisualization.UnitValue)">
             <summary>
                 Compares two unit values to determine if they are equal or not.
             </summary>
@@ -7486,6 +7439,13 @@
             <returns>
                 A value indicating whether the ranges are not equal.
             </returns>
+        </member>
+        <member name="M:System.Windows.Controls.DataVisualization.Range`1.As``1">
+            <summary>
+            Casts the range to another type.
+            </summary>
+            <typeparam name="K"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:System.Windows.Controls.DataVisualization.Range`1.Add(System.Windows.Controls.DataVisualization.Range{`0})">
             <summary>
@@ -9223,6 +9183,36 @@
         <member name="P:System.Windows.Controls.DataVisualization.WeakReferenceBag`1.Items">
             <summary>
                 Gets or sets the list of event listeners.
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
             </summary>
         </member>
     </members>

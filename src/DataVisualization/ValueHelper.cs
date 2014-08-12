@@ -256,11 +256,11 @@ namespace System.Windows.Controls.DataVisualization
             {
                 return 0;
             }
-            if (left == null && right != null)
+            if (left == null)
             {
                 return -1;
             }
-            if (left != null && right == null)
+            if (right == null)
             {
                 return 1;
             }

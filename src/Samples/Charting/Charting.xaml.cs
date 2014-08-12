@@ -14,8 +14,9 @@ namespace System.Windows.Controls.Samples
 
             SampleList.ItemsSource =
                 typeof (Charting).Assembly.GetTypes()
-                    .Select(t => new Item(t, t.GetCustomAttribute<SampleAttribute>()))
-                    .Where(t => t.Attribute != null);
+                    .Select(t => new Item(t))
+                    .Where(t => t.Attribute != null)
+                    .ToArray();
         }
     }
 
@@ -29,10 +30,10 @@ namespace System.Windows.Controls.Samples
 
         public object Object { get { return Activator.CreateInstance(Type); } }
 
-        public Item(Type type, SampleAttribute attribute)
+        public Item(Type type)
         {
             Type = type;
-            Attribute = attribute;
+            Attribute = type.GetCustomAttribute<SampleAttribute>();
         }
     }
 }

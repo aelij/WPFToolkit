@@ -31,7 +31,7 @@
             </Grid>
 
             <!-- Custom Axes -->
-            <Grid Style="{StaticResource WrapperStyle}">
+            <!--<Grid Style="{StaticResource WrapperStyle}">
                 <chartingToolkit:Chart Title="Custom Axes">
                     <chartingToolkit:Chart.Series>
                         <chartingToolkit:BarSeries
@@ -45,7 +45,7 @@
                         <chartingToolkit:LinearAxis Title="Population" Orientation="X" Minimum="0" Maximum="600000" Interval="200000" ShowGridLines="True"  FontStyle="Italic"/>
                     </chartingToolkit:Chart.Axes>
                 </chartingToolkit:Chart>
-            </Grid>
+            </Grid>-->
 
         </WrapPanel>
 

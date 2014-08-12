@@ -4,6 +4,7 @@
 // All other rights reserved.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -97,7 +98,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
 
             double offset = seriesIndex*Math.Round(barHeight) + coordinateRangeHeight*0.1;
             double dataPointY = minimum + offset;
-
+            
             if (GetIsDataPointGrouped(category))
             {
                 // Multiple DataPoints share this category; offset and overlap them appropriately
@@ -123,10 +124,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 Canvas.SetTop(dataPoint, top);
                 dataPoint.Width = width;
                 dataPoint.Height = height;
+
+                Trace.WriteLine(string.Format("Cateogry {0} Max {1} Min {2} X {3} Y {4} Width {5} Height {6}", category, maximum, minimum, dataPointX, dataPointY, width, height));
+
             }
             else
             {
                 dataPoint.Visibility = Visibility.Collapsed;
+                Trace.WriteLine("Collapsed");
             }
         }
     }

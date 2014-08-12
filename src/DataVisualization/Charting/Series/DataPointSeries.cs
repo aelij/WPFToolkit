@@ -52,8 +52,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
             EventManager.RegisterRoutedEvent(
                 "SelectionChanged",
                 RoutingStrategy.Bubble,
-                typeof (SelectionChangedEventHandler),
-                typeof (DataPointSeries));
+                typeof(SelectionChangedEventHandler),
+                typeof(DataPointSeries));
 #endif
 
         /// <summary>
@@ -88,14 +88,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         private readonly MultipleDictionary<object, DataPoint> _dataPointsByObject =
             new MultipleDictionary<object, DataPoint>(
                 true,
-                new GenericEqualityComparer<object>(
-                    (left, right) =>
-                        left.Equals(right),
-                    obj => obj.GetHashCode()),
-                new GenericEqualityComparer<DataPoint>(
-                    (left, right) =>
-                        ReferenceEquals(left, right),
-                    obj => obj.GetHashCode()));
+                new GenericEqualityComparer<object>((left, right) => left.Equals(right), obj => obj.GetHashCode()),
+                new GenericEqualityComparer<DataPoint>(ReferenceEquals, obj => obj.GetHashCode()));
 
         /// <summary>
         ///     Gets or sets the Binding Path to use for identifying the dependent value.
@@ -103,17 +97,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public string DependentValuePath
         {
             get { return (null != DependentValueBinding) ? DependentValueBinding.Path.Path : null; }
-            set
-            {
-                if (null == value)
-                {
-                    DependentValueBinding = null;
-                }
-                else
-                {
-                    DependentValueBinding = new Binding(value);
-                }
-            }
+            set { DependentValueBinding = null == value ? null : new Binding(value); }
         }
 
         /// <summary>
@@ -143,17 +127,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public string IndependentValuePath
         {
             get { return (null != IndependentValueBinding) ? IndependentValueBinding.Path.Path : null; }
-            set
-            {
-                if (null == value)
-                {
-                    IndependentValueBinding = null;
-                }
-                else
-                {
-                    IndependentValueBinding = new Binding(value);
-                }
-            }
+            set { IndependentValueBinding = null == value ? null : new Binding(value); }
         }
 
         #region public IEnumerable ItemsSource
@@ -163,7 +137,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get { return (IEnumerable) GetValue(ItemsSourceProperty); }
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
 
@@ -173,8 +147,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(
                 "ItemsSource",
-                typeof (IEnumerable),
-                typeof (DataPointSeries),
+                typeof(IEnumerable),
+                typeof(DataPointSeries),
                 new PropertyMetadata(OnItemsSourceChanged));
 
         /// <summary>
@@ -184,7 +158,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnItemsSourceChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            ((DataPointSeries) o).OnItemsSourceChanged((IEnumerable) e.OldValue, (IEnumerable) e.NewValue);
+            ((DataPointSeries)o).OnItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
         }
 
         /// <summary>
@@ -212,11 +186,11 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 // Use a WeakEventListener so that the backwards reference doesn't keep this object alive
                 _weakEventListener =
-                    new WeakEventListener<DataPointSeries, object, NotifyCollectionChangedEventArgs>(this);
-                _weakEventListener.OnEventAction =
-                    (instance, source, eventArgs) => instance.ItemsSourceCollectionChanged(source, eventArgs);
-                _weakEventListener.OnDetachAction =
-                    weakEventListener => newValueINotifyCollectionChanged.CollectionChanged -= weakEventListener.OnEvent;
+                    new WeakEventListener<DataPointSeries, object, NotifyCollectionChangedEventArgs>(this)
+                    {
+                        OnEventAction = (instance, source, eventArgs) => instance.ItemsSourceCollectionChanged(eventArgs),
+                        OnDetachAction = weakEventListener => newValueINotifyCollectionChanged.CollectionChanged -= weakEventListener.OnEvent
+                    };
                 newValueINotifyCollectionChanged.CollectionChanged += _weakEventListener.OnEvent;
             }
 
@@ -235,7 +209,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public AnimationSequence AnimationSequence
         {
-            get { return (AnimationSequence) GetValue(AnimationSequenceProperty); }
+            get { return (AnimationSequence)GetValue(AnimationSequenceProperty); }
             set { SetValue(AnimationSequenceProperty, value); }
         }
 
@@ -277,9 +251,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty TransitionEasingFunctionProperty =
             DependencyProperty.Register(
                 "TransitionEasingFunction",
-                typeof (IEasingFunction),
-                typeof (DataPointSeries),
-                new PropertyMetadata(new QuadraticEase {EasingMode = EasingMode.EaseInOut}));
+                typeof(IEasingFunction),
+                typeof(DataPointSeries),
+                new PropertyMetadata(new QuadraticEase { EasingMode = EasingMode.EaseInOut }));
 
         #endregion public IEasingFunction TransitionEasingFunction
 
@@ -289,7 +263,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public bool IsSelectionEnabled
         {
-            get { return (bool) GetValue(IsSelectionEnabledProperty); }
+            get { return (bool)GetValue(IsSelectionEnabledProperty); }
             set { SetValue(IsSelectionEnabledProperty, value); }
         }
 
@@ -299,8 +273,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty IsSelectionEnabledProperty =
             DependencyProperty.Register(
                 "IsSelectionEnabled",
-                typeof (bool),
-                typeof (DataPointSeries),
+                typeof(bool),
+                typeof(DataPointSeries),
                 new PropertyMetadata(false, OnIsSelectionEnabledPropertyChanged));
 
         /// <summary>
@@ -312,9 +286,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnIsSelectionEnabledPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPointSeries) d;
-            var oldValue = (bool) e.OldValue;
-            var newValue = (bool) e.NewValue;
+            var source = (DataPointSeries)d;
+            var oldValue = (bool)e.OldValue;
+            var newValue = (bool)e.NewValue;
             source.OnIsSelectionEnabledPropertyChanged(oldValue, newValue);
         }
 
@@ -339,8 +313,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty AnimationSequenceProperty =
             DependencyProperty.Register(
                 "AnimationSequence",
-                typeof (AnimationSequence),
-                typeof (DataPointSeries),
+                typeof(AnimationSequence),
+                typeof(DataPointSeries),
                 new PropertyMetadata(AnimationSequence.Simultaneous));
 
         #endregion public AnimationSequence AnimationSequence
@@ -365,6 +339,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 Panel oldValue = _plotArea;
                 _plotArea = value;
+                // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (_plotArea != oldValue)
                 {
                     OnPlotAreaChanged(oldValue, value);
@@ -417,8 +392,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register(
                 "SelectedItem",
-                typeof (object),
-                typeof (DataPointSeries),
+                typeof(object),
+                typeof(DataPointSeries),
                 new PropertyMetadata(null, OnSelectedItemPropertyChanged));
 
         /// <summary>
@@ -428,7 +403,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnSelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPointSeries) d;
+            var source = (DataPointSeries)d;
             object oldValue = e.OldValue;
             object newValue = e.NewValue;
             source.OnSelectedItemPropertyChanged(oldValue, newValue);
@@ -445,9 +420,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             if (null != newValue)
             {
                 // Find the corresponding Control
-                dataPoint =
-                    _dataPointsByObject[newValue].Where(dp => Equals(newValue, dp.DataContext) && dp.IsActive)
-                        .FirstOrDefault();
+                dataPoint = _dataPointsByObject[newValue].FirstOrDefault(dp => Equals(newValue, dp.DataContext) && dp.IsActive);
                 if (null == dataPoint)
                 {
                     // None; clear SelectedItem
@@ -465,9 +438,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 }
             }
             // Unselect everything else
-            foreach (
-                DataPoint dataPointUnselect in
-                    ActiveDataPoints.Where(
+            foreach (DataPoint dataPointUnselect in ActiveDataPoints.Where(
+                // ReSharper disable once PossibleUnintendedReferenceComparison
                         activeDataPoint => (activeDataPoint != dataPoint) && activeDataPoint.IsSelected))
             {
                 dataPointUnselect.IsSelectedChanged -= OnDataPointIsSelectedChanged;
@@ -532,8 +504,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty DataPointStyleProperty =
             DependencyProperty.Register(
                 DataPointStyleName,
-                typeof (Style),
-                typeof (DataPointSeries),
+                typeof(Style),
+                typeof(DataPointSeries),
                 new PropertyMetadata(null, OnDataPointStylePropertyChanged));
 
         /// <summary>
@@ -543,7 +515,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnDataPointStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((DataPointSeries) d).OnDataPointStylePropertyChanged((Style) e.OldValue, (Style) e.NewValue);
+            ((DataPointSeries)d).OnDataPointStylePropertyChanged((Style)e.OldValue, (Style)e.NewValue);
         }
 
         /// <summary>
@@ -581,8 +553,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty LegendItemStyleProperty =
             DependencyProperty.Register(
                 LegendItemStyleName,
-                typeof (Style),
-                typeof (DataPointSeries),
+                typeof(Style),
+                typeof(DataPointSeries),
                 new PropertyMetadata(null, OnLegendItemStylePropertyChanged));
 
         /// <summary>
@@ -592,8 +564,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnLegendItemStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (DataPointSeries) d;
-            source.OnLegendItemStylePropertyChanged((Style) e.OldValue, (Style) e.NewValue);
+            var source = (DataPointSeries)d;
+            source.OnLegendItemStylePropertyChanged((Style)e.OldValue, (Style)e.NewValue);
         }
 
         /// <summary>
@@ -625,7 +597,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public TimeSpan TransitionDuration
         {
-            get { return (TimeSpan) GetValue(TransitionDurationProperty); }
+            get { return (TimeSpan)GetValue(TransitionDurationProperty); }
             set { SetValue(TransitionDurationProperty, value); }
         }
 
@@ -635,8 +607,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty TransitionDurationProperty =
             DependencyProperty.Register(
                 "TransitionDuration",
-                typeof (TimeSpan),
-                typeof (DataPointSeries),
+                typeof(TimeSpan),
+                typeof(DataPointSeries),
                 new PropertyMetadata(TimeSpan.FromSeconds(0.5)));
 
         #endregion public TimeSpan TransitionDuration
@@ -649,8 +621,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
             Justification = "Dependency properties are initialized in-line.")]
         static DataPointSeries()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof (DataPointSeries),
-                new FrameworkPropertyMetadata(typeof (DataPointSeries)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DataPointSeries),
+                new FrameworkPropertyMetadata(typeof(DataPointSeries)));
         }
 
 #endif
@@ -750,8 +722,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>The data point associated with the object.</returns>
         protected virtual DataPoint GetDataPoint(object dataContext)
         {
-            DataPoint dataPoint =
-                _dataPointsByObject[dataContext].Where(dp => Equals(dataContext, dp.DataContext)).FirstOrDefault();
+            DataPoint dataPoint = _dataPointsByObject[dataContext].FirstOrDefault(dp => Equals(dataContext, dp.DataContext));
             return dataPoint;
         }
 
@@ -785,18 +756,17 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="owner">The owner of the new LegendItem.</param>
         protected virtual LegendItem CreateLegendItem(DataPointSeries owner)
         {
-            var legendItem = new LegendItem {Owner = owner};
-            legendItem.SetBinding(StyleProperty, new Binding(ActualLegendItemStyleName) {Source = this});
-            legendItem.SetBinding(ContentControl.ContentProperty, new Binding(TitleName) {Source = this});
+            var legendItem = new LegendItem { Owner = owner };
+            legendItem.SetBinding(StyleProperty, new Binding(ActualLegendItemStyleName) { Source = this });
+            legendItem.SetBinding(ContentControl.ContentProperty, new Binding(TitleName) { Source = this });
             return legendItem;
         }
 
         /// <summary>
         ///     Method that handles the ObservableCollection.CollectionChanged event for the ItemsSource property.
         /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event data.</param>
-        private void ItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ItemsSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             // Pass notification on
             OnItemsSourceCollectionChanged(ItemsSource, e);
@@ -815,20 +785,17 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 IList<DataPoint> removedDataPoints = new List<DataPoint>();
                 if (oldItems != null)
                 {
-                    if (oldItems != null)
+                    // Remove existing objects from internal collections.
+                    foreach (object dataContext in oldItems)
                     {
-                        // Remove existing objects from internal collections.
-                        foreach (object dataContext in oldItems)
+                        DataPoint removedDataPoint = RemoveObject(dataContext);
+                        _dataPointsByObject.Remove(dataContext, removedDataPoint);
+                        if (removedDataPoint != null)
                         {
-                            DataPoint removedDataPoint = RemoveObject(dataContext);
-                            _dataPointsByObject.Remove(dataContext, removedDataPoint);
-                            if (removedDataPoint != null)
-                            {
-                                removedDataPoints.Add(removedDataPoint);
-                            }
+                            removedDataPoints.Add(removedDataPoint);
                         }
                     }
-                    StaggeredStateChange(removedDataPoints, removedDataPoints.Count, DataPointState.Hiding);
+                    StaggeredStateChange(removedDataPoints, DataPointState.Hiding);
                 }
 
                 IList<DataPoint> addedDataPoints = new List<DataPoint>();
@@ -904,7 +871,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="oldDataPoints">Old inactive data points.</param>
         protected virtual void OnDataPointsChanged(IList<DataPoint> newDataPoints, IList<DataPoint> oldDataPoints)
         {
-            StaggeredStateChange(newDataPoints, newDataPoints.Count(), DataPointState.Showing);
+            StaggeredStateChange(newDataPoints, DataPointState.Showing);
         }
 
         /// <summary>
@@ -1079,12 +1046,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
         {
             UpdatingDataPoints = true;
 
-            DetachEventHandlersFromDataPoints(dataPoints);
+            var points = dataPoints as DataPoint[] ?? dataPoints.ToArray();
+
+            DetachEventHandlersFromDataPoints(points);
             try
             {
                 OnBeforeUpdateDataPoints();
 
-                foreach (DataPoint dataPoint in dataPoints)
+                foreach (DataPoint dataPoint in points)
                 {
                     UpdateDataPoint(dataPoint);
                 }
@@ -1093,7 +1062,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             }
             finally
             {
-                AttachEventHandlersToDataPoints(dataPoints);
+                AttachEventHandlersToDataPoints(points);
                 UpdatingDataPoints = false;
             }
         }
@@ -1228,14 +1197,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 dataPoint.SetBinding(DataPoint.IndependentValueProperty, IndependentValueBinding);
             }
 
-            if (DependentValueBinding == null)
-            {
-                dataPoint.SetBinding(DataPoint.DependentValueProperty, new Binding());
-            }
-            else
-            {
-                dataPoint.SetBinding(DataPoint.DependentValueProperty, DependentValueBinding);
-            }
+            dataPoint.SetBinding(DataPoint.DependentValueProperty, DependentValueBinding ?? new Binding());
         }
 
         /// <summary>
@@ -1244,54 +1206,58 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="dataPoints">
         ///     The data points to change the state of.
         /// </param>
-        /// <param name="dataPointCount">The number of data points in the sequence.</param>
         /// <param name="newState">The state to change to.</param>
-        private void StaggeredStateChange(IEnumerable<DataPoint> dataPoints, int dataPointCount, DataPointState newState)
+        private void StaggeredStateChange(IList<DataPoint> dataPoints, DataPointState newState)
         {
+            int dataPointCount = dataPoints.Count;
             if (PlotArea == null || dataPointCount == 0)
             {
                 return;
             }
 
+            if (AnimationSequence == AnimationSequence.Simultaneous)
+            {
+                foreach (var dataPoint in dataPoints)
+                {
+                    dataPoint.State = newState;
+                }
+                return;
+            }
+
             var stateChangeStoryBoard = new Storyboard();
 
-            dataPoints.ForEachWithIndex((dataPoint, count) =>
+            for (int count = 0; count < dataPointCount; ++count)
             {
+                var dataPoint = dataPoints[count];
+
                 // Create an Animation
                 var objectAnimationUsingKeyFrames = new ObjectAnimationUsingKeyFrames();
                 Storyboard.SetTarget(objectAnimationUsingKeyFrames, dataPoint);
                 Storyboard.SetTargetProperty(objectAnimationUsingKeyFrames, new PropertyPath("State"));
 
                 // Create a key frame
-                var discreteObjectKeyFrame = new DiscreteObjectKeyFrame();
-                discreteObjectKeyFrame.Value = newState;
+                var discreteObjectKeyFrame = new DiscreteObjectKeyFrame { Value = newState };
 
                 // Create the specified animation type
                 switch (AnimationSequence)
                 {
-                    case AnimationSequence.Simultaneous:
-                        discreteObjectKeyFrame.KeyTime = TimeSpan.Zero;
-                        break;
                     case AnimationSequence.FirstToLast:
-                        discreteObjectKeyFrame.KeyTime = TimeSpan.FromMilliseconds(1000*((double) count/dataPointCount));
+                        discreteObjectKeyFrame.KeyTime = TimeSpan.FromMilliseconds(1000 * ((double)count / dataPointCount));
                         break;
                     case AnimationSequence.LastToFirst:
                         discreteObjectKeyFrame.KeyTime =
-                            TimeSpan.FromMilliseconds(1000*((double) (dataPointCount - count - 1)/dataPointCount));
+                            TimeSpan.FromMilliseconds(1000 * ((double)(dataPointCount - count - 1) / dataPointCount));
                         break;
                 }
 
                 // Add the Animation to the Storyboard
                 objectAnimationUsingKeyFrames.KeyFrames.Add(discreteObjectKeyFrame);
                 stateChangeStoryBoard.Children.Add(objectAnimationUsingKeyFrames);
-            });
-            stateChangeStoryBoard.Duration = new Duration(AnimationSequence.Simultaneous == AnimationSequence
-                ? TimeSpan.FromTicks(1)
-                : TimeSpan.FromMilliseconds(1001));
-
+            }
+            
             _storyBoardQueue.Enqueue(
                 stateChangeStoryBoard,
-                (sender, args) => { stateChangeStoryBoard.Stop(); });
+                (sender, args) => stateChangeStoryBoard.Stop());
         }
 
         /// <summary>

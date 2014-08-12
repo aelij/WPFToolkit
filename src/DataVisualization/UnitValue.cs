@@ -8,7 +8,7 @@ namespace System.Windows.Controls.DataVisualization
     /// <summary>
     ///     A value in units.
     /// </summary>
-    public struct UnitValue : IComparable
+    public struct UnitValue : IEquatable<UnitValue>, IComparable<UnitValue>
     {
         /// <summary>
         ///     Returns a UnitValue representing an invalid value.
@@ -16,7 +16,7 @@ namespace System.Windows.Controls.DataVisualization
         /// <returns>UnitValue instance.</returns>
         public static UnitValue NaN()
         {
-            return new UnitValue {Value = double.NaN};
+            return new UnitValue { Value = double.NaN };
         }
 
         /// <summary>
@@ -24,7 +24,8 @@ namespace System.Windows.Controls.DataVisualization
         /// </summary>
         /// <param name="value">The value associated with the units.</param>
         /// <param name="unit">The units associated with the value.</param>
-        public UnitValue(double value, Unit unit) : this()
+        public UnitValue(double value, Unit unit)
+            : this()
         {
             Value = value;
             Unit = unit;
@@ -49,9 +50,9 @@ namespace System.Windows.Controls.DataVisualization
         ///     object.  A number equal to 0 if they are equal.  A number greater
         ///     than zero if this unit value is greater than obj.
         /// </returns>
-        public int CompareTo(object obj)
+        public int CompareTo(UnitValue obj)
         {
-            var unitValue = (UnitValue) obj;
+            var unitValue = obj;
 
             if (unitValue.Unit != Unit)
             {
@@ -61,6 +62,11 @@ namespace System.Windows.Controls.DataVisualization
             return Value.CompareTo(unitValue.Value);
         }
 
+        public bool Equals(UnitValue other)
+        {
+            return Value.Equals(other.Value) && Unit == other.Unit;
+        }
+
         /// <summary>
         ///     Determines if two values are equal.
         /// </summary>
@@ -68,17 +74,8 @@ namespace System.Windows.Controls.DataVisualization
         /// <returns>A value indicating whether values are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is UnitValue))
-            {
-                return false;
-            }
-            var unitValue = (UnitValue) obj;
-
-            if ((ReferenceEquals(unitValue.Value, Value) || Equals(unitValue.Value, Value)) && unitValue.Unit == Unit)
-            {
-                return true;
-            }
-            return false;
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is UnitValue && Equals((UnitValue)obj);
         }
 
         /// <summary>
@@ -143,10 +140,9 @@ namespace System.Windows.Controls.DataVisualization
         /// <returns>The hash code.</returns>
         public override int GetHashCode()
         {
-            // TODO: Copy this from the anonymous structure implementation.
             unchecked
             {
-                return Value.GetHashCode() + (int) Unit;
+                return (Value.GetHashCode() * 397) ^ (int)Unit;
             }
         }
     }

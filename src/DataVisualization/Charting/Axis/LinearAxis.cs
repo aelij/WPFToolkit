@@ -13,13 +13,13 @@ namespace System.Windows.Controls.DataVisualization.Charting
     /// <summary>
     ///     An axis that displays numeric values.
     /// </summary>
-    [StyleTypedProperty(Property = "GridLineStyle", StyleTargetType = typeof (Line))]
-    [StyleTypedProperty(Property = "MajorTickMarkStyle", StyleTargetType = typeof (Line))]
-    [StyleTypedProperty(Property = "MinorTickMarkStyle", StyleTargetType = typeof (Line))]
-    [StyleTypedProperty(Property = "AxisLabelStyle", StyleTargetType = typeof (NumericAxisLabel))]
-    [StyleTypedProperty(Property = "TitleStyle", StyleTargetType = typeof (Title))]
-    [TemplatePart(Name = AxisGridName, Type = typeof (Grid))]
-    [TemplatePart(Name = AxisTitleName, Type = typeof (Title))]
+    [StyleTypedProperty(Property = "GridLineStyle", StyleTargetType = typeof(Line))]
+    [StyleTypedProperty(Property = "MajorTickMarkStyle", StyleTargetType = typeof(Line))]
+    [StyleTypedProperty(Property = "MinorTickMarkStyle", StyleTargetType = typeof(Line))]
+    [StyleTypedProperty(Property = "AxisLabelStyle", StyleTargetType = typeof(NumericAxisLabel))]
+    [StyleTypedProperty(Property = "TitleStyle", StyleTargetType = typeof(Title))]
+    [TemplatePart(Name = AxisGridName, Type = typeof(Grid))]
+    [TemplatePart(Name = AxisTitleName, Type = typeof(Title))]
     public class LinearAxis : NumericAxis
     {
         #region public double? Interval
@@ -27,10 +27,10 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     Gets or sets the axis interval.
         /// </summary>
-        [TypeConverter(typeof (NullableConverter<double>))]
+        [TypeConverter(typeof(NullableConverter<double>))]
         public double? Interval
         {
-            get { return (double?) GetValue(IntervalProperty); }
+            get { return (double?)GetValue(IntervalProperty); }
             set { SetValue(IntervalProperty, value); }
         }
 
@@ -40,8 +40,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty IntervalProperty =
             DependencyProperty.Register(
                 "Interval",
-                typeof (double?),
-                typeof (LinearAxis),
+                typeof(double?),
+                typeof(LinearAxis),
                 new PropertyMetadata(null, OnIntervalPropertyChanged));
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="e">Event arguments.</param>
         private static void OnIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (LinearAxis) d;
+            var source = (LinearAxis)d;
             source.OnIntervalPropertyChanged();
         }
 
@@ -72,7 +72,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public double ActualInterval
         {
-            get { return (double) GetValue(ActualIntervalProperty); }
+            get { return (double)GetValue(ActualIntervalProperty); }
             private set { SetValue(ActualIntervalProperty, value); }
         }
 
@@ -82,8 +82,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public static readonly DependencyProperty ActualIntervalProperty =
             DependencyProperty.Register(
                 "ActualInterval",
-                typeof (double),
-                typeof (LinearAxis),
+                typeof(double),
+                typeof(LinearAxis),
                 new PropertyMetadata(double.NaN));
 
         #endregion public double ActualInterval
@@ -93,7 +93,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         public LinearAxis()
         {
-            ActualRange = new Range<IComparable>(0.0, 1.0);
+            ActualRange = new Range<double>(0.0, 1.0);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="currentRange">The range of values.</param>
         /// <param name="length">The length of axis.</param>
         /// <returns>The plot area coordinate of a value.</returns>
-        protected override UnitValue GetPlotAreaCoordinate(object value, Range<IComparable> currentRange, double length)
+        protected override UnitValue GetPlotAreaCoordinate(object value, Range<double> currentRange, double length)
         {
             if (value == null)
             {
@@ -113,12 +113,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
             if (currentRange.HasData)
             {
                 double doubleValue = ValueHelper.ToDouble(value);
-                Range<double> actualDoubleRange = currentRange.ToDoubleRange();
+                Range<double> actualDoubleRange = currentRange;
 
                 double pixelLength = Math.Max(length - 1, 0);
                 double rangelength = actualDoubleRange.Maximum - actualDoubleRange.Minimum;
 
-                return new UnitValue((doubleValue - actualDoubleRange.Minimum)*(pixelLength/rangelength), Unit.Pixels);
+                return new UnitValue((doubleValue - actualDoubleRange.Minimum) * (pixelLength / rangelength), Unit.Pixels);
             }
 
             return UnitValue.NaN();
@@ -140,39 +140,39 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 return Interval.Value;
             }
 
-            Range<double> doubleActualRange = ActualRange.ToDoubleRange();
+            Range<double> doubleActualRange = ActualRange;
 
             // helper functions
-            Func<double, double> Exponent = x => Math.Ceiling(Math.Log(x, 10));
-            Func<double, double> Mantissa = x => x/Math.Pow(10, Exponent(x) - 1);
+            Func<double, double> exponentFunc = x => Math.Ceiling(Math.Log(x, 10));
+            Func<double, double> mantissaFunc = x => x / Math.Pow(10, exponentFunc(x) - 1);
 
             // reduce intervals for horizontal axis.
             double maxIntervals = Orientation == AxisOrientation.X
-                ? MaximumAxisIntervalsPer200Pixels*0.8
+                ? MaximumAxisIntervalsPer200Pixels * 0.8
                 : MaximumAxisIntervalsPer200Pixels;
             // real maximum interval count
-            double maxIntervalCount = GetLength(availableSize)/200*maxIntervals;
+            double maxIntervalCount = GetLength(availableSize) / 200 * maxIntervals;
 
             double range = Math.Abs(doubleActualRange.Minimum - doubleActualRange.Maximum);
-            double interval = Math.Pow(10, Exponent(range));
+            double interval = Math.Pow(10, exponentFunc(range));
             double tempInterval = interval;
 
             // decrease interval until interval count becomes less than maxIntervalCount
             while (true)
             {
-                var mantissa = (int) Mantissa(tempInterval);
+                var mantissa = (int)mantissaFunc(tempInterval);
                 if (mantissa == 5)
                 {
                     // reduce 5 to 2
-                    tempInterval = ValueHelper.RemoveNoiseFromDoubleMath(tempInterval/2.5);
+                    tempInterval = ValueHelper.RemoveNoiseFromDoubleMath(tempInterval / 2.5);
                 }
                 else if (mantissa == 2 || mantissa == 1 || mantissa == 10)
                 {
                     // reduce 2 to 1,10 to 5,1 to 0.5
-                    tempInterval = ValueHelper.RemoveNoiseFromDoubleMath(tempInterval/2.0);
+                    tempInterval = ValueHelper.RemoveNoiseFromDoubleMath(tempInterval / 2.0);
                 }
 
-                if (range/tempInterval > maxIntervalCount)
+                if (range / tempInterval > maxIntervalCount)
                 {
                     break;
                 }
@@ -189,9 +189,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>
         ///     A sequence of values to create major tick marks for.
         /// </returns>
-        protected override IEnumerable<IComparable> GetMajorTickMarkValues(Size availableSize)
+        protected override IEnumerable<double> GetMajorTickMarkValues(Size availableSize)
         {
-            return GetMajorValues(availableSize).Cast<IComparable>();
+            return GetMajorValues(availableSize);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 yield break;
             }
-            Range<double> typedActualRange = ActualRange.ToDoubleRange();
+            Range<double> typedActualRange = ActualRange;
             ActualInterval = CalculateActualInterval(availableSize);
             double startValue = AlignToInterval(typedActualRange.Minimum, ActualInterval);
             if (startValue < typedActualRange.Minimum)
@@ -219,7 +219,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             for (int counter = 1; nextValue <= typedActualRange.Maximum; counter++)
             {
                 yield return nextValue;
-                nextValue = startValue + (counter*ActualInterval);
+                nextValue = startValue + (counter * ActualInterval);
             }
         }
 
@@ -228,9 +228,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         /// <param name="availableSize">The available size.</param>
         /// <returns>A sequence of values to plot on the axis.</returns>
-        protected override IEnumerable<IComparable> GetLabelValues(Size availableSize)
+        protected override IEnumerable<double> GetLabelValues(Size availableSize)
         {
-            return GetMajorValues(availableSize).Cast<IComparable>();
+            return GetMajorValues(availableSize);
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             double typedValue = value;
             return
                 ValueHelper.RemoveNoiseFromDoubleMath(
-                    ValueHelper.RemoveNoiseFromDoubleMath(Math.Floor(typedValue/typedInterval))*typedInterval);
+                    ValueHelper.RemoveNoiseFromDoubleMath(Math.Floor(typedValue / typedInterval)) * typedInterval);
         }
 
         /// <summary>
@@ -254,17 +254,17 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         /// <param name="value">The plot area position.</param>
         /// <returns>The value at that plot area coordinate.</returns>
-        protected override IComparable GetValueAtPosition(UnitValue value)
+        protected override double? GetValueAtPosition(UnitValue value)
         {
             if (ActualRange.HasData && ActualLength != 0.0)
             {
                 if (value.Unit == Unit.Pixels)
                 {
                     double coordinate = value.Value;
-                    Range<double> actualDoubleRange = ActualRange.ToDoubleRange();
+                    Range<double> actualDoubleRange = ActualRange;
 
                     double rangelength = actualDoubleRange.Maximum - actualDoubleRange.Minimum;
-                    double output = ((coordinate*(rangelength/ActualLength)) + actualDoubleRange.Minimum);
+                    double output = ((coordinate * (rangelength / ActualLength)) + actualDoubleRange.Minimum);
 
                     return output;
                 }
@@ -275,35 +275,21 @@ namespace System.Windows.Controls.DataVisualization.Charting
         }
 
         /// <summary>
-        ///     Function that uses the mid point of all the data values
-        ///     in the value margins to convert a length into a range
-        ///     of data with the mid point as the center of that range.
-        /// </summary>
-        /// <param name="midPoint">The mid point of the range.</param>
-        /// <param name="length">The length of the range.</param>
-        /// <returns>The range object.</returns>
-        private static Range<double> LengthToRange(double midPoint, double length)
-        {
-            double halfLength = length/2.0;
-            return new Range<double>(midPoint - halfLength, midPoint + halfLength);
-        }
-
-        /// <summary>
         ///     Overrides the actual range to ensure that it is never set to an
         ///     empty range.
         /// </summary>
         /// <param name="range">The range to override.</param>
         /// <returns>Returns the overridden range.</returns>
-        protected override Range<IComparable> OverrideDataRange(Range<IComparable> range)
+        protected override Range<double> OverrideDataRange(Range<double> range)
         {
             range = base.OverrideDataRange(range);
             if (!range.HasData)
             {
-                return new Range<IComparable>(0.0, 1.0);
+                return new Range<double>(0.0, 1.0);
             }
             if (ValueHelper.Compare(range.Minimum, range.Maximum) == 0)
             {
-                var outputRange = new Range<IComparable>((ValueHelper.ToDouble(range.Minimum)) - 1,
+                var outputRange = new Range<double>((ValueHelper.ToDouble(range.Minimum)) - 1,
                     (ValueHelper.ToDouble(range.Maximum)) + 1);
                 return outputRange;
             }
@@ -318,6 +304,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                     foreach (ValueMargin valueMargin in valueMarginProvider.GetValueMargins(this))
                     {
                         var dataAnchoredToOrigin = valueMarginProvider as IAnchoredToOrigin;
+                        // ReSharper disable once PossibleUnintendedReferenceComparison
                         isDataAnchoredToOrigin = (dataAnchoredToOrigin != null &&
                                                   dataAnchoredToOrigin.AnchoredAxis == this);
 
@@ -331,11 +318,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
 
                 if (valueMargins.Count > 0)
                 {
-                    double maximumPixelMarginLength =
-                        valueMargins
-                            .Select(
-                                valueMargin => valueMargin.ValueMargin.LowMargin + valueMargin.ValueMargin.HighMargin)
-                            .MaxOrNullable().Value;
+                    double maximumPixelMarginLength = valueMargins.Select(
+                        valueMargin => valueMargin.ValueMargin.LowMargin + valueMargin.ValueMargin.HighMargin)
+                        .Max();
 
                     // Requested margin is larger than the axis so give up
                     // trying to find a range that will fit it.
@@ -344,8 +329,8 @@ namespace System.Windows.Controls.DataVisualization.Charting
                         return range;
                     }
 
-                    Range<double> originalRange = range.ToDoubleRange();
-                    Range<double> currentRange = range.ToDoubleRange();
+                    Range<double> originalRange = range;
+                    Range<double> currentRange = range;
 
                     // Ensure range is not empty.
                     if (currentRange.Minimum == currentRange.Maximum)
@@ -357,20 +342,21 @@ namespace System.Windows.Controls.DataVisualization.Charting
                     double actualLength = ActualLength;
                     ValueMarginCoordinateAndOverlap maxLeftOverlapValueMargin;
                     ValueMarginCoordinateAndOverlap maxRightOverlapValueMargin;
-                    UpdateValueMargins(valueMargins, currentRange.ToComparableRange());
+                    UpdateValueMargins(valueMargins, currentRange);
                     GetMaxLeftAndRightOverlap(valueMargins, out maxLeftOverlapValueMargin,
                         out maxRightOverlapValueMargin);
 
                     while (maxLeftOverlapValueMargin.LeftOverlap > 0 || maxRightOverlapValueMargin.RightOverlap > 0)
                     {
-                        double unitOverPixels = currentRange.GetLength().Value/actualLength;
+                        // ReSharper disable once PossibleInvalidOperationException
+                        double unitOverPixels = currentRange.GetLength().Value / actualLength;
                         double newMinimum = currentRange.Minimum -
-                                            ((maxLeftOverlapValueMargin.LeftOverlap + 0.5)*unitOverPixels);
+                                            ((maxLeftOverlapValueMargin.LeftOverlap + 0.5) * unitOverPixels);
                         double newMaximum = currentRange.Maximum +
-                                            ((maxRightOverlapValueMargin.RightOverlap + 0.5)*unitOverPixels);
+                                            ((maxRightOverlapValueMargin.RightOverlap + 0.5) * unitOverPixels);
 
                         currentRange = new Range<double>(newMinimum, newMaximum);
-                        UpdateValueMargins(valueMargins, currentRange.ToComparableRange());
+                        UpdateValueMargins(valueMargins, currentRange);
                         GetMaxLeftAndRightOverlap(valueMargins, out maxLeftOverlapValueMargin,
                             out maxRightOverlapValueMargin);
                     }
@@ -387,7 +373,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                         }
                     }
 
-                    return currentRange.ToComparableRange();
+                    return currentRange;
                 }
             }
             return range;

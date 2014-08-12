@@ -368,9 +368,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Charting\Images\Abstract Glow.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Common\BusinessObjects\NhlData\NhlData.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

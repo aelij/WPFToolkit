@@ -22,7 +22,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
     [StyleTypedProperty(Property = "TitleStyle", StyleTargetType = typeof(Title))]
     [TemplatePart(Name = AxisGridName, Type = typeof(Grid))]
     [TemplatePart(Name = AxisTitleName, Type = typeof(Title))]
-    public class DateTimeAxis : RangeAxis
+    public class DateTimeAxis : RangeAxis<DateTime>
     {
         #region public DateTime? ActualMaximum
 
@@ -297,7 +297,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <summary>
         ///     Gets the origin value on the axis.
         /// </summary>
-        protected override IComparable Origin
+        protected override DateTime? Origin
         {
             get { return null; }
         }
@@ -308,23 +308,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         public DateTimeAxis()
         {
             int year = DateTime.Now.Year;
-            ActualRange = new Range<IComparable>(new DateTime(year, 1, 1), new DateTime(year + 1, 1, 1));
+            ActualRange = new Range<DateTime>(new DateTime(year, 1, 1), new DateTime(year + 1, 1, 1));
         }
-
-        /// <summary>
-        ///     Converts a range to a range of type DateTime.
-        /// </summary>
-        /// <param name="range">A range to be converted.</param>
-        /// <returns>A range that has been converted.</returns>
-        private static Range<DateTime> ToDateTimeRange(Range<IComparable> range)
-        {
-            if (!range.HasData)
-            {
-                return new Range<DateTime>();
-            }
-            return new Range<DateTime>(ValueHelper.ToDateTime(range.Minimum), ValueHelper.ToDateTime(range.Maximum));
-        }
-
+        
         /// <summary>
         ///     Creates a new instance of the DateTimeAxisLabel class.
         /// </summary>
@@ -362,12 +348,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
         ///     actual range changes.
         /// </summary>
         /// <param name="range">The actual range.</param>
-        protected override void OnActualRangeChanged(Range<IComparable> range)
+        protected override void OnActualRangeChanged(Range<DateTime> range)
         {
             if (range.HasData)
             {
-                ActualMaximum = (DateTime)range.Maximum;
-                ActualMinimum = (DateTime)range.Minimum;
+                ActualMaximum = range.Maximum;
+                ActualMinimum = range.Minimum;
             }
             else
             {
@@ -396,7 +382,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <param name="currentRange">The range to use determine the coordinate.</param>
         /// <param name="length">The length of the axis.</param>
         /// <returns>The plot area coordinate of a value.</returns>
-        protected override UnitValue GetPlotAreaCoordinate(object value, Range<IComparable> currentRange, double length)
+        protected override UnitValue GetPlotAreaCoordinate(object value, Range<DateTime> currentRange, double length)
         {
             if (value == null)
             {
@@ -407,14 +393,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
             {
                 DateTime dateTimeValue = ValueHelper.ToDateTime(value);
 
-                Range<DateTime> actualDateTimeRange = ToDateTimeRange(currentRange);
-
-                double rangelength = actualDateTimeRange.Maximum.ToOADate() - actualDateTimeRange.Minimum.ToOADate();
+                double rangelength = currentRange.Maximum.ToOADate() - currentRange.Minimum.ToOADate();
                 double pixelLength = Math.Max(length - 1, 0);
 
                 return
                     new UnitValue(
-                        (dateTimeValue.ToOADate() - actualDateTimeRange.Minimum.ToOADate()) * (pixelLength / rangelength),
+                        (dateTimeValue.ToOADate() - currentRange.Minimum.ToOADate()) * (pixelLength / rangelength),
                         Unit.Pixels);
             }
 
@@ -437,7 +421,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                 return Interval.Value;
             }
 
-            Range<DateTime> actualDateTimeRange = ToDateTimeRange(ActualRange);
+            Range<DateTime> actualDateTimeRange = ActualRange;
 
             DateTimeIntervalType intervalType;
             double interval = CalculateDateTimeInterval(actualDateTimeRange.Minimum, actualDateTimeRange.Maximum,
@@ -460,7 +444,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
             }
 
             ActualInterval = CalculateActualInterval(availableSize);
-            Range<DateTime> dateTimeRange = ToDateTimeRange(ActualRange);
+            Range<DateTime> dateTimeRange = ActualRange;
 
             DateTime start = AlignIntervalStart(dateTimeRange.Minimum, ActualInterval, ActualIntervalType);
             while (start < dateTimeRange.Minimum)
@@ -486,9 +470,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>
         ///     A sequence of values to create major tick marks for.
         /// </returns>
-        protected override IEnumerable<IComparable> GetMajorTickMarkValues(Size availableSize)
+        protected override IEnumerable<DateTime> GetMajorTickMarkValues(Size availableSize)
         {
-            return GetMajorAxisValues(availableSize).Cast<IComparable>();
+            return GetMajorAxisValues(availableSize);
         }
 
         /// <summary>
@@ -496,9 +480,9 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         /// <param name="availableSize">The available size.</param>
         /// <returns>A sequence of values to plot on the axis.</returns>
-        protected override IEnumerable<IComparable> GetLabelValues(Size availableSize)
+        protected override IEnumerable<DateTime> GetLabelValues(Size availableSize)
         {
-            return GetMajorAxisValues(availableSize).Cast<IComparable>();
+            return GetMajorAxisValues(availableSize);
         }
 
         /// <summary>
@@ -707,14 +691,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// </summary>
         /// <param name="value">The position.</param>
         /// <returns>A range of values at that plot area coordinate.</returns>
-        protected override IComparable GetValueAtPosition(UnitValue value)
+        protected override DateTime? GetValueAtPosition(UnitValue value)
         {
             if (ActualRange.HasData && ActualLength != 0.0)
             {
                 double coordinate = value.Value;
                 if (value.Unit == Unit.Pixels)
                 {
-                    Range<DateTime> actualDateTimeRange = ToDateTimeRange(ActualRange);
+                    Range<DateTime> actualDateTimeRange = ActualRange;
 
                     double minimumAsDouble = actualDateTimeRange.Minimum.ToOADate();
                     double rangelength = actualDateTimeRange.Maximum.ToOADate() - minimumAsDouble;
@@ -947,14 +931,14 @@ namespace System.Windows.Controls.DataVisualization.Charting
         /// <returns>The overridden range.</returns>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity",
             Justification = "This method is very difficult to break up cleanly.")]
-        protected override Range<IComparable> OverrideDataRange(Range<IComparable> range)
+        protected override Range<DateTime> OverrideDataRange(Range<DateTime> range)
         {
-            Range<IComparable> overriddenActualRange = range;
+            var overriddenActualRange = range;
 
             if (!overriddenActualRange.HasData)
             {
                 int year = DateTime.Now.Year;
-                return new Range<IComparable>(new DateTime(year, 1, 1), new DateTime(year + 1, 1, 1));
+                return new Range<DateTime>(new DateTime(year, 1, 1), new DateTime(year + 1, 1, 1));
             }
 
             // ActualLength of 1.0 or less maps all points to the same coordinate
@@ -981,7 +965,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                         return range;
                     }
 
-                    Range<DateTime> currentRange = range.ToDateTimeRange();
+                    Range<DateTime> currentRange = range;
 
                     // Ensure range is not empty.
                     if (currentRange.Minimum == currentRange.Maximum)
@@ -994,7 +978,7 @@ namespace System.Windows.Controls.DataVisualization.Charting
                     double actualLength = ActualLength;
                     ValueMarginCoordinateAndOverlap maxLeftOverlapValueMargin;
                     ValueMarginCoordinateAndOverlap maxRightOverlapValueMargin;
-                    UpdateValueMargins(valueMargins, currentRange.ToComparableRange());
+                    UpdateValueMargins(valueMargins, currentRange);
                     GetMaxLeftAndRightOverlap(valueMargins, out maxLeftOverlapValueMargin,
                         out maxRightOverlapValueMargin);
 
@@ -1008,12 +992,12 @@ namespace System.Windows.Controls.DataVisualization.Charting
                                          (long)((maxRightOverlapValueMargin.RightOverlap + 0.5) * unitOverPixels));
 
                         currentRange = new Range<DateTime>(newMinimum, newMaximum);
-                        UpdateValueMargins(valueMargins, currentRange.ToComparableRange());
+                        UpdateValueMargins(valueMargins, currentRange);
                         GetMaxLeftAndRightOverlap(valueMargins, out maxLeftOverlapValueMargin,
                             out maxRightOverlapValueMargin);
                     }
 
-                    return currentRange.ToComparableRange();
+                    return currentRange;
                 }
             }
 
