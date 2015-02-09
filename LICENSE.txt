@@ -1,0 +1,5 @@
+Microsoft Public License (Ms-PL)
+http://wpf.codeplex.com/license/
+
+Forked from
+http://wpf.codeplex.com/
